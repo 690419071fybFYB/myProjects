@@ -1,0 +1,95 @@
+services:
+  mysql:
+    image: docker.m.daocloud.io/library/mysql:8.0
+    container_name: hioshop-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-hiolabsDB}
+      TZ: ${TZ:-Asia/Shanghai}
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ../hioshop-server/hiolabsDB.sql:/docker-entrypoint-initdb.d/01-hiolabsDB.sql:ro
+    networks:
+      - hioshop_net
+
+  server:
+    build:
+      context: ../hioshop-server
+      dockerfile: Dockerfile
+    container_name: hioshop-server
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-hiolabsDB}
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      WEIXIN_APPID: ${WEIXIN_APPID:-}
+      WEIXIN_SECRET: ${WEIXIN_SECRET:-}
+      WEIXIN_MCH_ID: ${WEIXIN_MCH_ID:-}
+      WEIXIN_PARTNER_KEY: ${WEIXIN_PARTNER_KEY:-}
+      WEIXIN_NOTIFY_URL: ${WEIXIN_NOTIFY_URL:-https://api.fybshop.site/api/pay/notify}
+      OSS_ACCESS_KEY_ID: ${OSS_ACCESS_KEY_ID:-}
+      OSS_ACCESS_KEY_SECRET: ${OSS_ACCESS_KEY_SECRET:-}
+    volumes:
+      - server_logs:/app/logs
+    ports:
+      - "127.0.0.1:8360:8360"
+    networks:
+      - hioshop_net
+
+  admin:
+    build:
+      context: ../hioshop-admin-web
+      dockerfile: Dockerfile
+    container_name: hioshop-admin
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8080:80"
+    networks:
+      - hioshop_net
+
+  caddy:
+    image: docker.m.daocloud.io/library/caddy:2.8-alpine
+    container_name: hioshop-caddy
+    restart: unless-stopped
+    profiles:
+      - caddy
+    depends_on:
+      - server
+      - admin
+    environment:
+      ACME_EMAIL: ${ACME_EMAIL}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - hioshop_net
+
+networks:
+  hioshop_net:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  server_logs:
+  caddy_data:
+  caddy_config:

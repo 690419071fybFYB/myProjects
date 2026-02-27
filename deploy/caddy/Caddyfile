@@ -1,0 +1,13 @@
+{
+  email {$ACME_EMAIL}
+}
+
+api.fybshop.site {
+  encode gzip
+  reverse_proxy server:8360
+}
+
+admin.fybshop.site {
+  encode gzip
+  reverse_proxy admin:80
+}
