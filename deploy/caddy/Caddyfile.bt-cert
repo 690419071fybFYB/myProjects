@@ -1,5 +1,4 @@
 {
-  email {$ACME_EMAIL:admin@fybshop.site}
   servers {
     protocols h1 h2
   }
@@ -7,10 +6,12 @@
 
 {$API_DOMAIN:api.fybshop.site} {
   encode gzip
+  tls /bt_certs/api.fybshop.site/fullchain.pem /bt_certs/api.fybshop.site/privkey.pem
   reverse_proxy server:8360
 }
 
 {$ADMIN_DOMAIN:admin.fybshop.site} {
   encode gzip
+  tls /bt_certs/admin.fybshop.site/fullchain.pem /bt_certs/admin.fybshop.site/privkey.pem
   reverse_proxy admin:80
 }

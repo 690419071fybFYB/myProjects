@@ -3,7 +3,6 @@ set -euo pipefail
 
 API_DOMAIN=${API_DOMAIN:-api.fybshop.site}
 ADMIN_DOMAIN=${ADMIN_DOMAIN:-admin.fybshop.site}
-ENABLE_CADDY=${ENABLE_CADDY:-0}
 
 if ! command -v docker >/dev/null 2>&1; then
   echo "[ERROR] docker is not installed"
@@ -24,11 +23,7 @@ if [ ! -f .env ]; then
 fi
 
 docker compose pull || true
-if [ "${ENABLE_CADDY}" = "1" ]; then
-  docker compose --profile caddy up -d --build
-else
-  docker compose up -d --build
-fi
+docker compose up -d --build
 
 echo "[INFO] Running basic checks..."
 docker compose ps
@@ -39,9 +34,8 @@ curl -sS -X POST "http://127.0.0.1:8360/admin/auth/login" \
   -H 'Content-Type: application/x-www-form-urlencoded' \
   --data 'username=qilelab.com&password=qilelab.com' | head -c 240
 
-if [ "${ENABLE_CADDY}" = "1" ]; then
-  curl -fsS "https://${API_DOMAIN}" >/dev/null && echo "[OK] API domain reachable"
-  curl -fsS "https://${ADMIN_DOMAIN}" >/dev/null && echo "[OK] Admin domain reachable"
-fi
+echo "[INFO] Caddy entry is enabled."
+echo "[INFO] Local test: https://api.localhost:${CADDY_HTTPS_PORT:-18443} and https://admin.localhost:${CADDY_HTTPS_PORT:-18443}"
+echo "[INFO] Production domains: https://${API_DOMAIN} and https://${ADMIN_DOMAIN}"
 
 echo "\n[DONE] Deployment finished"
