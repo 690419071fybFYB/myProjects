@@ -16,6 +16,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
+    ports:
+      - "127.0.0.1:3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
       - ../hioshop-server/hiolabsDB.sql:/docker-entrypoint-initdb.d/01-hiolabsDB.sql:ro
@@ -43,6 +45,11 @@ services:
       WEIXIN_MCH_ID: ${WEIXIN_MCH_ID:-}
       WEIXIN_PARTNER_KEY: ${WEIXIN_PARTNER_KEY:-}
       WEIXIN_NOTIFY_URL: ${WEIXIN_NOTIFY_URL:-https://api.fybshop.site/api/pay/notify}
+      COS_SECRET_ID: ${COS_SECRET_ID:-}
+      COS_SECRET_KEY: ${COS_SECRET_KEY:-}
+      COS_BUCKET: ${COS_BUCKET:-fybshopbk-1369967353}
+      COS_REGION: ${COS_REGION:-ap-shanghai}
+      COS_DOMAIN: ${COS_DOMAIN:-https://fybshopbk-1369967353.cos.ap-shanghai.myqcloud.com}
       OSS_ACCESS_KEY_ID: ${OSS_ACCESS_KEY_ID:-}
       OSS_ACCESS_KEY_SECRET: ${OSS_ACCESS_KEY_SECRET:-}
     volumes:
