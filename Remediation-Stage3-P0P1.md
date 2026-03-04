@@ -594,3 +594,17 @@
 ### 22.3 脚本实跑结果
 - 已执行：`deploy/stage3-release-verify.sh`
 - 结果：全流程通过，输出 `Stage 3 release verification passed.`
+
+## 23. Stage 3 持续推进增量（2026-03-04，第十五批）
+
+### 23.1 预发布 Smoke 报告化
+- 新增：`PreRelease-Smoke-Report.md`
+- 内容：
+  - 本轮 smoke 的执行命令、日志路径、关键证据行号。
+  - 自动化通过项与非阻断告警项。
+  - 需要人工真机验收的剩余项（小程序授权体验、微信真实支付闭环）。
+
+### 23.2 日志管理
+- 变更：`deploy/.gitignore` 增加 `logs/`
+- 目的：
+  - 保留本地 smoke 日志用于追溯，同时避免日志文件进入版本库。

@@ -667,3 +667,16 @@
   - server: `compile + goods-import + coupon + cos-smoke + audit` 全通过（audit 为 `22 vulnerabilities (1 low, 21 moderate)`）。
   - miniprogram: 关键文件语法检查通过。
   - admin-web: `lint + test + build + audit` 全通过（audit 为 `4 vulnerabilities (2 low, 2 moderate)`）。
+
+## 23. Stage 3 第十五批验证（2026-03-04）
+
+### 23.1 预发布 Smoke 实跑留档
+- 命令：`deploy/stage3-release-verify.sh | tee deploy/logs/stage3-smoke-20260304-185157.log`
+- 结果：`exit=0`
+- 关键证据：
+  - goods-import `[PASS]` 全项通过（日志 88-95）
+  - coupon smoke 通过（日志 109）
+  - COS smoke 通过（日志 123）
+  - server audit：`22 vulnerabilities (1 low, 21 moderate)`（日志 213）
+  - admin audit：`4 vulnerabilities (2 low, 2 moderate)`（日志 441）
+  - 全流程结束标记：`Stage 3 release verification passed.`（日志 448）
