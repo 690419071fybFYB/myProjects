@@ -7,6 +7,20 @@
 
 目标：把高优先级风险转成可直接执行、可回归、可上线的任务清单（按仓库/模块分组）。
 
+## 执行进度（2026-03-04）
+- `S-A1`：已完成（订单写链路归属校验）
+- `S-A2`：已完成（测试支付入口下线）
+- `S-B1`：已完成（API 默认鉴权 + 白名单放行，移除 address 公共白名单）
+- `S-B2`：已完成（JWT secret 环境化 + expiresIn + 算法限制）
+- `W-B3`：已完成（admin 生产禁用 mock 注入）
+- `S-C1`：已完成（后台抓图 SSRF 防护：协议限制 + DNS/IP 拒绝内网 + 重定向校验 + MIME/体积限制）
+- `S-C2`：已完成（管理员密码迁移 bcrypt，兼容旧 md5 并在登录时自动升级）
+- `S-C3`：进行中（已升级 `jsonwebtoken` 到 9.x；`admin/api express`、`api/service/weixin`、`api/controller/auth|order|qrcode`、`admin/service/token`、`api/service/oss`、迁移脚本均已移除 `request/request-promise`；并已清理 `node-wget/jushuitan/gm/querystring/xml2js` 直依赖，`moment/nanoid` 已升级；当前剩余以 `thinkjs/cos-nodejs-sdk-v5/weixinpay/xlsx` 传递风险为主）
+- `W-C4`：已完成（admin-web `axios` 升级到 1.x，构建脚本已兼容 Node 17+ OpenSSL）
+- 构建验证：`hioshop-server npm run compile` 通过
+- 构建验证：`hioshop-admin-web npm run build:prod` 通过（脚本已内置 OpenSSL 兼容参数）
+- 依赖验证：`hioshop-server npm audit --omit=dev --audit-level=high` 收敛至 `58`；`hioshop-admin-web` 收敛至 `4`（无高危）
+
 ## 0. 执行原则
 1. 先封堵可被直接利用的 P0（订单越权、测试支付入口），再做架构性 P1（统一鉴权、JWT、SSRF、口令存储）。
 2. 每个任务必须包含：代码变更点、回归用例、上线门禁、回滚策略。
@@ -255,3 +269,328 @@
 - 风险说明与回滚点
 
 推荐状态：`TODO -> IN_PROGRESS -> IN_REVIEW -> VERIFIED -> RELEASED`。
+
+## 12. Stage 3 持续推进增量（2026-03-04，第四批）
+
+### 12.1 服务端支付依赖替换（S-C3 继续）
+- 变更：
+  - `hioshop-server/src/api/service/weixin.js`
+    - 移除 `weixinpay` 调用，改为官方统一下单接口 `pay/unifiedorder` 的直连实现（HTTP + MD5 签名 + XML 编解码）。
+    - 保持返回字段兼容（`appid/timeStamp/nonceStr/package/signType/paySign`）。
+    - 增加 access_token 内存缓存与过期前保护窗口，手机号获取在 token 失效时自动重试一次。
+  - `hioshop-server/src/admin/service/token.js`
+    - 增加 access_token 内存缓存，减少重复请求与瞬时失败概率。
+- 依赖：
+  - `hioshop-server/package.json` 移除 `weixinpay`。
+
+### 12.2 商品详情输入安全加固（后台录入 + 批量导入）
+- 新增：
+  - `hioshop-server/src/common/utils/sanitize_html.js`
+    - 对富文本进行标签与属性白名单清洗，禁止危险协议与标签。
+- 接入点：
+  - `hioshop-server/src/admin/controller/goods.js`（单品保存）
+  - `hioshop-server/src/admin/service/goods_import.js`（批量导入）
+- 目标：
+  - 后台写入 `goods_desc` 前统一清洗，降低富文本 XSS 注入风险。
+
+### 12.3 小程序登录弹窗稳定性优化
+- 变更：
+  - `hioshop-miniprogram/components/login-profile-sheet/index.wxml|js|wxss`
+    - 移除“微信一键填充昵称头像”路径（避免回填 `微信用户` 的误导行为）。
+    - 头像区域改为 `open-type="chooseAvatar"`，直接支持微信头像/上传头像。
+    - 头像上传本地兜底从 `chooseMedia` 切换为兼容性更高的 `chooseImage`。
+    - 昵称输入框保留 `type="nickname"`，直接触发微信昵称选择；仅保留昵称+手机号两项必填。
+
+### 12.4 当前收敛状态
+- `S-C3`：持续推进中，`weixinpay` 已清理完成，`request` 仅剩 `cos-nodejs-sdk-v5` 传递依赖。
+- 输入安全：`goods_desc` 的主要写入链路已完成服务端收口。
+- 小程序登录体验：去除冗余入口并提升头像/昵称/手机号采集可用性。
+
+### 12.5 批量导入稳态防护补充
+- 变更：`hioshop-server/src/admin/controller/goods.js`
+  - 新增导入文件校验：
+    - 文件不能为空
+    - 文件大小上限 `5MB`
+    - MIME 类型白名单 + `.xlsx` 后缀双重校验
+- 目标：
+  - 降低异常大文件与伪造文件造成的解析风险与性能抖动。
+
+## 13. Stage 3 持续推进增量（2026-03-04，第五批）
+
+### 13.1 API 输入校验与上传防护加固
+- 新增：
+  - `hioshop-server/src/common/utils/validate.js`
+    - 通用输入清洗与校验：文本清洗、手机号、微信 code、base64 形态、头像 URL 白名单。
+- 接入：
+  - `hioshop-server/src/api/controller/auth.js`
+    - `loginByWeixin` 增加 code 合法性校验与微信请求异常兜底。
+    - `phoneNumber` 增加 code/base64 参数格式校验，手机号结果二次校验。
+  - `hioshop-server/src/api/controller/settings.js`
+    - 登录态强校验；昵称/手机号输入校验；头像 URL 白名单处理；昵称解码容错。
+  - `hioshop-server/src/api/controller/upload.js`
+    - 头像上传增加登录态校验、空文件/大小上限（5MB）校验、MIME+后缀双重白名单。
+
+### 13.2 小程序设置页与登录弹窗一致化
+- 变更：
+  - `hioshop-miniprogram/pages/ucenter/settings/index.js`
+    - 头像上传失败回滚到旧头像并提示。
+    - 手机号改为必填且统一 `^1[3-9]\d{9}$` 校验。
+    - 保存成功提示从错误提示改为成功提示。
+  - `hioshop-miniprogram/components/login-profile-sheet/index.js`
+    - 清理冗余 `profileAuthorized` 状态，降低组件复杂度。
+
+### 13.3 当前效果
+- 登录资料链路在前后端均增加参数边界与异常兜底。
+- 头像上传失败、手机号格式异常等场景行为更可控。
+
+## 14. Stage 3 持续推进增量（2026-03-04，第六批）
+
+### 14.1 依赖锁状态恢复与审计收敛
+- 问题：此前中断导致 `hioshop-server` 的 `package.json` override 与 `package-lock.json` 未完全同步。
+- 处理：
+  - 使用 `npm install --force` 完成 lock 同步。
+  - `fast-xml-parser` 已被提升至 `4.5.4`（经 `npm ls fast-xml-parser` 验证）。
+- 结果：
+  - server 审计继续下降：`51 vulnerabilities (1 low, 16 moderate, 16 high, 18 critical)`。
+  - `request` 仍仅来自 `cos-nodejs-sdk-v5` 传递依赖。
+
+### 14.2 OSS 抓图链路 SSRF 防护对齐
+- 变更：`hioshop-server/src/api/service/oss.js`
+- 内容：
+  - 对齐 `admin/service/oss.js` 的安全策略：
+    - 强制 `https`
+    - 主机名与私网/回环 IP 拦截
+    - DNS 解析后 IP 风险校验
+    - 重定向逐跳校验
+    - 内容类型必须为图片
+    - 响应体大小上限（默认 10MB）
+- 目标：
+  - 消除 API 侧抓图能力与后台抓图能力的安全策略差异。
+
+### 14.3 admin-web 工程门禁可执行性修复
+- 变更：
+  - `hioshop-admin-web/package.json`
+    - 新增 `eslint` 开发依赖
+    - `lint` 调整为 `eslint --ext .js src`
+  - 新增：
+    - `hioshop-admin-web/.eslintrc.cjs`
+    - `hioshop-admin-web/.eslintignore`
+- 结果：
+  - `npm run lint` 恢复可执行并通过。
+
+### 14.4 小程序状态
+- 当前仅完成代码级与语法级验证；真机授权链路（微信昵称/手机号弹窗）仍需你本地真机点测确认。
+
+## 15. Stage 3 持续推进增量（2026-03-04，第七批）
+
+### 15.1 文件类型防伪增强
+- 变更：`hioshop-server/src/api/controller/upload.js`
+  - 头像上传新增文件头（magic bytes）校验，支持 JPEG/PNG/GIF/WEBP。
+  - 在 MIME/后缀校验基础上再做内容签名校验，降低伪装文件上传风险。
+
+- 变更：`hioshop-server/src/admin/controller/goods.js`
+  - 商品导入新增 xlsx 文件头校验（ZIP 头），防止仅改扩展名绕过。
+
+### 15.2 依赖与工程门禁进展
+- `hioshop-server`
+  - override 生效后，`fast-xml-parser` 已固定在 `4.5.4`。
+  - 高危审计继续下降（当前 51）。
+- `hioshop-admin-web`
+  - lint 门禁恢复可执行：新增 eslint 与基础配置。
+  - `lint/test(build no tests)/build` 均可执行通过。
+
+### 15.3 仍需后续专项处理
+- server 剩余高危主要聚焦于 legacy 框架链与 `request` 传递依赖（`cos-nodejs-sdk-v5`）。
+- 彻底清零需要框架代际升级或对象存储 SDK 替换专项。
+
+## 16. Stage 3 持续推进增量（2026-03-04，第八批）
+
+### 16.1 移除未使用七牛链路
+- 变更：
+  - 删除：
+    - `hioshop-server/src/admin/service/qiniu.js`
+    - `hioshop-server/src/api/service/qiniu.js`
+  - 依赖移除：`hioshop-server/package.json` 删除 `qiniu`
+- 依据：
+  - 全仓库检索无控制器调用 `service('qiniu')`，当前生产链路已迁移 OSS。
+
+### 16.2 审计口径澄清
+- 因 macOS 可选依赖（`fsevents`）会放大审计噪音，增加一条“去可选依赖口径”用于稳定比较：
+  - `npm audit --omit=dev --omit=optional --audit-level=high`
+- 当前该口径结果：
+  - `42 vulnerabilities (14 moderate, 11 high, 17 critical)`
+- 结论：
+  - 主要剩余风险仍集中在 legacy 框架链（thinkjs/koa/babel）与 `cos-nodejs-sdk-v5 -> request`。
+
+## 17. Stage 3 持续推进增量（2026-03-04，第九批）
+
+### 17.1 资料完整性门禁服务端化
+- 新增：`hioshop-server/src/common/utils/profile.js`
+  - `isProfileComplete`（昵称+手机号）统一判定。
+- 接入：
+  - `hioshop-server/src/api/controller/base.js`
+    - 对 `order/address/footprint` 及 `cart/checkout` 增加资料完整性门禁。
+    - 未完善资料时返回 `412`（请先完善登录资料）。
+  - `hioshop-server/src/api/config/config.js`
+    - 新增 `profileRequiredController/profileRequiredAction` 配置。
+- 价值：
+  - 即使客户端绕过，也无法直接调用受限接口。
+
+### 17.2 地址接口参数校验收敛
+- 变更：`hioshop-server/src/api/controller/address.js`
+  - 新增姓名、手机号、省市区ID、详细地址、地址ID严格校验。
+  - 清理无用依赖与冗余语句。
+- 价值：
+  - 降低脏数据写入和异常参数导致的行为不确定性。
+
+### 17.3 小程序请求层统一拦截 `412`
+- 变更：
+  - `hioshop-miniprogram/utils/request/index.js`
+  - `hioshop-miniprogram/utils/util.js`
+- 行为：
+  - 当后端返回 `errno=412` 时，统一 toast 并跳转“我的”页面。
+- 价值：
+  - 与服务端资料门禁形成闭环，减少页面级重复处理。
+
+### 17.4 依赖治理进一步收敛
+- 执行：`hioshop-server npm audit fix --omit=dev --omit=optional`（非 force）。
+- 结果：
+  - 审计口径 `--omit=dev --omit=optional --audit-level=high` 收敛到：
+    - `32 vulnerabilities (28 moderate, 2 high, 2 critical)`
+  - 主要剩余集中在：
+    - `cos-nodejs-sdk-v5 -> request/form-data/tough-cookie/qs`
+    - `thinkjs` 生态链（`ms/xml2js/validator`）
+    - `xlsx`（无可用修复）
+
+## 18. Stage 3 持续推进增量（2026-03-04，第十批）
+
+### 18.1 小程序登录态与资料态一致性修复
+- 变更：`hioshop-miniprogram/utils/request/index.js`
+  - `refreshTokenByWeixin` 改为统一调用 `session.saveSession`，不再手工写 `token/userInfo`。
+  - `clearSession` 改为统一调用 `session.clearSession`。
+- 价值：
+  - 解决 token 刷新后 `profileCompleted` 可能不同步导致误拦截的问题。
+
+### 18.2 分类页滚动区域隔离
+- 变更：`hioshop-miniprogram/pages/category/index.json`
+  - 新增 `"disableScroll": true`，禁用页面级滚动，只保留左右区域各自滚动。
+- 价值：
+  - 右侧商品区滑动时，左侧分类导航不再整体跟随页面位移，交互更稳定。
+
+### 18.3 服务端依赖高危再收敛
+- 变更：`hioshop-server/package.json`（overrides）
+  - 新增：
+    - `validator@^13.15.26`
+    - `xml2js@^0.6.2`
+    - `form-data@^2.5.4`
+    - `qs@^6.14.1`
+- 结果（稳定口径）：
+  - `npm audit --omit=dev --omit=optional --audit-level=high`
+  - 从 `32 vulnerabilities (28 moderate, 2 high, 2 critical)` 下降到：
+    - `28 vulnerabilities (27 moderate, 1 high)`
+- 当前剩余高危：
+- `xlsx`（无官方可用修复版本；已通过导入大小限制、魔数校验、行数上限等措施降低利用面）。
+
+## 19. Stage 3 持续推进增量（2026-03-04，第十一批）
+
+### 19.1 移除服务端 `xlsx` 高危链路
+- 变更：
+  - `hioshop-server/src/admin/service/goods_import.js`
+    - 读写 Excel 全部改为 `exceljs`（模板导出、导入校验、错误文件导出）。
+  - `hioshop-server/src/admin/controller/goods.js`
+    - 导出模板改为 `await service.getTemplateBuffer()`（异步安全调用）。
+  - `hioshop-server/src/admin/controller/coupon.js`
+    - 券记录导出改为 `exceljs` 生成 xlsx。
+  - `hioshop-server/scripts/test-goods-import.js`
+    - 自动化脚本同步改为 `exceljs`。
+  - `hioshop-server/package.json`
+    - 移除 `xlsx`，新增 `exceljs`；
+    - 继续通过 `overrides` 固定 `minimist` 以消除 `exceljs` 传递链路 critical。
+
+### 19.2 风险收敛结果
+- 审计口径：`npm audit --omit=dev --omit=optional --audit-level=high`
+- 收敛结果：
+  - 从上一批 `28 vulnerabilities (1 low, 27 moderate, 1 high)` 进一步到：
+  - `28 vulnerabilities (1 low, 27 moderate)`（`high/critical = 0`）
+
+### 19.3 兼容性验证
+- 服务端 `compile + test:goods-import + test:coupon` 全量通过。
+- 商品批量导入链路（模板下载、预检、导入、重复SKU跳过、错误文件下载）实测通过。
+- 券记录导出链路保持可用（编译与冒烟通过）。
+
+## 20. Stage 3 持续推进增量（2026-03-04，第十二批）
+
+### 20.1 移除 `cos-nodejs-sdk-v5` 依赖链
+- 变更：
+  - `hioshop-server/src/api/service/oss.js`
+  - `hioshop-server/src/admin/service/oss.js`
+  - `hioshop-server/package.json`
+- 内容：
+  - OSS 客户端由 `cos-nodejs-sdk-v5` 切换为 AWS SDK v3 的 S3 兼容实现：
+    - `@aws-sdk/client-s3`
+    - `@aws-sdk/s3-request-presigner`
+  - 保留现有行为：
+    - 生成 PUT 直传签名 URL（10 分钟有效）
+    - 服务端本地文件上传
+    - 远程 HTTPS 图片抓取并上传
+  - 强化配置校验：`region/bucket/accessKeyId/accessKeySecret` 缺一即报错。
+
+### 20.2 风险收敛结果
+- 审计口径：`npm audit --omit=dev --omit=optional --audit-level=high`
+- 收敛：
+  - 由上一批 `28 vulnerabilities (1 low, 27 moderate)` 下降到：
+  - `22 vulnerabilities (1 low, 21 moderate)`
+- 说明：
+  - `request/tough-cookie/ajv` 相关链路已从生产依赖中清除。
+  - 当前剩余主要为 ThinkJS 生态历史依赖（如 `ms`）和 `brace-expansion`。
+
+### 20.3 回归验证
+- 服务端 `compile + test:goods-import + test:coupon` 继续全通过。
+- 管理端 `lint/test/build` 与审计口径复测保持稳定。
+- 小程序变更点（资料态同步、分类页滚动隔离）语法检查通过。
+
+## 21. Stage 3 持续推进增量（2026-03-04，第十三批）
+
+### 21.1 真实 COS 冒烟脚本化
+- 新增脚本：
+  - `hioshop-server/scripts/test-cos-smoke.js`
+  - `hioshop-server/package.json` 新增命令：`test:cos-smoke`
+- 覆盖链路：
+  - 后台登录获取 token
+  - 获取 COS PUT 直传签名（`/admin/index/getQiniuToken`）
+  - 使用签名 URL 直传 1x1 PNG
+  - 回查文件 URL 可访问（HEAD）
+  - 调用远程 HTTPS 抓图上传（`/admin/goods/uploadHttpsImage`）
+  - 回查抓图上传产物可访问（HEAD）
+
+### 21.2 真环境验证结论
+- 本机实际执行结果：`npm run test:cos-smoke` 通过。
+- 关键输出：
+  - 签名上传 host：`fybshopbk-1369967353.cos.ap-shanghai.myqcloud.com`
+  - 签名直传文件可访问（`image/png`）
+  - 远程抓图上传文件可访问（`image/jpeg`）
+- 结论：
+  - 当前 COS 签名与上传链路在真实运行环境可用，AWS SDK S3 兼容实现满足腾讯 COS 使用场景。
+
+## 22. Stage 3 持续推进增量（2026-03-04，第十四批）
+
+### 22.1 发布与回滚手册落地
+- 新增：
+  - `Stage3-Release-Checklist.md`
+  - `deploy/stage3-release-verify.sh`
+- 内容：
+  - 按仓库拆分提交单元（server/miniprogram/admin/docs）。
+  - 每个提交单元包含推荐 `git add` 与 `git commit` 命令。
+  - 发布 gate、回滚顺序、运行时兜底开关、发布后观察项。
+
+### 22.2 一键验证入口
+- `deploy/stage3-release-verify.sh` 聚合了三端关键门禁命令：
+  - server: `compile + goods-import + coupon + cos-smoke + audit`
+  - miniprogram: 关键文件语法检查
+  - admin-web: `lint + test + build + audit`
+- 作用：
+  - 在发版前与回滚后可快速复跑同一套基线，降低人工遗漏风险。
+
+### 22.3 脚本实跑结果
+- 已执行：`deploy/stage3-release-verify.sh`
+- 结果：全流程通过，输出 `Stage 3 release verification passed.`
