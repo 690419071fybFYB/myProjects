@@ -1,0 +1,61 @@
+name: CD
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy To Server
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        env:
+          DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
+        run: |
+          test -n "$DEPLOY_SSH_PRIVATE_KEY"
+          test -n "$DEPLOY_HOST"
+          test -n "$DEPLOY_USER"
+
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -p "${DEPLOY_PORT:-22}" -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
+
+      - name: Upload project bundle
+        env:
+          SERVER_HOST: ${{ secrets.DEPLOY_HOST }}
+          SERVER_USER: ${{ secrets.DEPLOY_USER }}
+          TARGET_DIR: ${{ secrets.DEPLOY_TARGET_DIR }}
+          SERVER_PORT: ${{ secrets.DEPLOY_PORT }}
+        run: |
+          export TARGET_DIR="${TARGET_DIR:-/opt/hioshop}"
+          export RSYNC_RSH="ssh -p ${SERVER_PORT:-22}"
+          bash deploy/scripts/upload_bundle.sh
+
+      - name: Remote docker compose deploy
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
+          DEPLOY_TARGET_DIR: ${{ secrets.DEPLOY_TARGET_DIR }}
+        run: |
+          TARGET_DIR="${DEPLOY_TARGET_DIR:-/opt/hioshop}"
+          ssh -p "${DEPLOY_PORT:-22}" "${DEPLOY_USER}@${DEPLOY_HOST}" "TARGET_DIR='${TARGET_DIR}' bash -s" <<'EOF'
+            set -euo pipefail
+            cd "$TARGET_DIR/deploy"
+            bash scripts/deploy_remote.sh
+          EOF

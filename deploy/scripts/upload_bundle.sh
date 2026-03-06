@@ -3,7 +3,10 @@ set -euo pipefail
 
 SERVER_HOST=${SERVER_HOST:-}
 SERVER_USER=${SERVER_USER:-root}
+SERVER_PORT=${SERVER_PORT:-22}
 TARGET_DIR=${TARGET_DIR:-/opt/hioshop}
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 
 if ! command -v rsync >/dev/null 2>&1; then
   echo "[ERROR] rsync is required"
@@ -18,27 +21,28 @@ fi
 
 echo "[INFO] Uploading project bundle to ${SERVER_USER}@${SERVER_HOST}:${TARGET_DIR}"
 
-ssh "${SERVER_USER}@${SERVER_HOST}" "mkdir -p ${TARGET_DIR}"
+ssh -p "${SERVER_PORT}" "${SERVER_USER}@${SERVER_HOST}" "mkdir -p ${TARGET_DIR}"
 
 rsync -avz --delete \
   --exclude '.git' \
   --exclude 'node_modules' \
   --exclude '.DS_Store' \
+  --exclude '.env' \
   --exclude 'dist' \
-  /Volumes/SAMSUNG/fyb/myProjects/deploy/ "${SERVER_USER}@${SERVER_HOST}:${TARGET_DIR}/deploy/"
+  "${PROJECT_ROOT}/deploy/" "${SERVER_USER}@${SERVER_HOST}:${TARGET_DIR}/deploy/"
 
 rsync -avz --delete \
   --exclude '.git' \
   --exclude 'node_modules' \
   --exclude '.DS_Store' \
   --exclude 'runtime' \
-  /Volumes/SAMSUNG/fyb/myProjects/hioshop-server/ "${SERVER_USER}@${SERVER_HOST}:${TARGET_DIR}/hioshop-server/"
+  "${PROJECT_ROOT}/hioshop-server/" "${SERVER_USER}@${SERVER_HOST}:${TARGET_DIR}/hioshop-server/"
 
 rsync -avz --delete \
   --exclude '.git' \
   --exclude 'node_modules' \
   --exclude '.DS_Store' \
   --exclude 'dist' \
-  /Volumes/SAMSUNG/fyb/myProjects/hioshop-admin-web/ "${SERVER_USER}@${SERVER_HOST}:${TARGET_DIR}/hioshop-admin-web/"
+  "${PROJECT_ROOT}/hioshop-admin-web/" "${SERVER_USER}@${SERVER_HOST}:${TARGET_DIR}/hioshop-admin-web/"
 
 echo "[DONE] Upload complete"

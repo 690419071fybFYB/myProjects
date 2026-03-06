@@ -73,3 +73,29 @@ curl -s -X POST https://api.fybshop.site/admin/auth/login \
 - MySQL imports `../hioshop-server/hiolabsDB.sql` only on first startup.
 - Keep `3306` closed to public network.
 - If server has host Nginx on `80/443`, stop it before starting Caddy container.
+
+## CI/CD (GitHub Actions)
+
+Repository includes:
+
+- `.github/workflows/ci.yml`: PR/push quality checks
+- `.github/workflows/cd.yml`: auto deploy on `main` (or manual trigger)
+
+Required GitHub repository secrets:
+
+- `DEPLOY_HOST`: server IP/domain
+- `DEPLOY_USER`: SSH login user (for example `root`)
+- `DEPLOY_SSH_PRIVATE_KEY`: private key content for the deploy user
+- `DEPLOY_PORT` (optional): SSH port, default `22`
+- `DEPLOY_TARGET_DIR` (optional): default `/opt/hioshop`
+
+Deployment flow:
+
+1. Push code to `main`
+2. Workflow uploads `deploy/`, `hioshop-server/`, `hioshop-admin-web/` via `rsync`
+3. Workflow runs `bash scripts/deploy_remote.sh` on remote server
+
+Important:
+
+- Keep production secrets only in server-side `deploy/.env`; CI upload excludes `.env`.
+- Never commit real credentials into repo files.
