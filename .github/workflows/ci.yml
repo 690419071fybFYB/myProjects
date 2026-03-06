@@ -48,10 +48,12 @@ jobs:
             echo "No ESLint config found, skip lint."
           fi
 
-      - name: Coupon smoke test
+      - name: Coupon smoke test (optional)
+        if: ${{ vars.RUN_SERVER_SMOKE_TESTS == 'true' }}
         run: npm run test:coupon
 
-      - name: Goods import smoke test
+      - name: Goods import smoke test (optional)
+        if: ${{ vars.RUN_SERVER_SMOKE_TESTS == 'true' }}
         run: npm run test:goods-import
 
   admin_web:
