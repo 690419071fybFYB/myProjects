@@ -1,0 +1,9 @@
+[submodule "hioshop-server"]
+	path = hioshop-server
+	url = https://github.com/690419071fybFYB/shop-server.git
+[submodule "hioshop-admin-web"]
+	path = hioshop-admin-web
+	url = https://github.com/690419071fybFYB/hioshop-admin-web.git
+[submodule "hioshop-miniprogram"]
+	path = hioshop-miniprogram
+	url = https://github.com/690419071fybFYB/hioshop-miniprogram.git
