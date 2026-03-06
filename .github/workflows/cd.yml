@@ -62,3 +62,19 @@ jobs:
             cd "$TARGET_DIR/deploy"
             bash scripts/deploy_remote.sh
           EOF
+
+      - name: Run DB migrations on remote
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
+          DEPLOY_TARGET_DIR: ${{ secrets.DEPLOY_TARGET_DIR }}
+        run: |
+          TARGET_DIR="${DEPLOY_TARGET_DIR:-/opt/hioshop}"
+          ssh -p "${DEPLOY_PORT:-22}" "${DEPLOY_USER}@${DEPLOY_HOST}" "TARGET_DIR='${TARGET_DIR}' bash -s" <<'EOF'
+            set -euo pipefail
+            cd "$TARGET_DIR/deploy"
+            bash scripts/migrate_remote.sh
+            curl -fsS http://127.0.0.1:8360/api/index/appInfo >/dev/null
+            echo "[OK] appInfo after migrations"
+          EOF
