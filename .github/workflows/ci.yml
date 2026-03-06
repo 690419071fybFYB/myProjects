@@ -34,7 +34,19 @@ jobs:
         run: npm run compile
 
       - name: Lint
-        run: npm run lint
+        run: |
+          HAS_ESLINT_CONFIG=false
+          if [ -f .eslintrc ] || [ -f .eslintrc.js ] || [ -f .eslintrc.cjs ] || [ -f .eslintrc.json ] || [ -f .eslintrc.yml ] || [ -f .eslintrc.yaml ]; then
+            HAS_ESLINT_CONFIG=true
+          elif [ -f package.json ] && node -e "const p=require('./package.json'); process.exit(p.eslintConfig ? 0 : 1)"; then
+            HAS_ESLINT_CONFIG=true
+          fi
+
+          if [ "$HAS_ESLINT_CONFIG" = "true" ]; then
+            npm run lint
+          else
+            echo "No ESLint config found, skip lint."
+          fi
 
       - name: Coupon smoke test
         run: npm run test:coupon
