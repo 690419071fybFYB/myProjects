@@ -1,0 +1,43 @@
+[
+  {"id":"L1-CORE-CART","name":"Cart core contract responses","layer":"L1","severity":"P1","profiles":["pr","nightly"]},
+  {"id":"L1-CORE-ORDER","name":"Order core contract responses","layer":"L1","severity":"P1","profiles":["pr","nightly"]},
+  {"id":"L1-CORE-PAY","name":"Pay core contract responses","layer":"L1","severity":"P1","profiles":["pr","nightly"]},
+  {"id":"L1-CORE-COUPON","name":"Coupon core contract responses","layer":"L1","severity":"P1","profiles":["pr","nightly"]},
+  {"id":"L1-CORE-ADDRESS","name":"Address core contract responses","layer":"L1","severity":"P1","profiles":["pr","nightly"]},
+  {"id":"L1-CORE-AUTH","name":"Auth and profile-gate contract responses","layer":"L1","severity":"P1","profiles":["pr","nightly"]},
+  {"id":"L1-CORE-SETTINGS","name":"Settings and app config contract responses","layer":"L1","severity":"P2","profiles":["pr","nightly"]},
+  {"id":"L1-CORE-AD","name":"Ad message contract responses","layer":"L1","severity":"P2","profiles":["pr","nightly"]},
+  {"id":"L1-FULL-API-ACTIONS","name":"All API actions contract probing","layer":"L1","severity":"P2","profiles":["nightly"]},
+  {"id":"L1-FULL-ADMIN-ACTIONS","name":"All Admin actions contract probing","layer":"L1","severity":"P2","profiles":["nightly"]},
+
+  {"id":"L2-HOME-PAGE","name":"Home page load, popup ad dismiss/jump and channel settings","layer":"L2","severity":"P1","profiles":["nightly"]},
+  {"id":"L2-LOGIN-GATE","name":"Login, token expiry refresh and profile incomplete 412 guard","layer":"L2","severity":"P0","profiles":["pr","nightly"]},
+  {"id":"L2-GOODS-FLOW","name":"Goods detail/spec selection/add cart/buy now/out-of-stock","layer":"L2","severity":"P0","profiles":["pr","nightly"]},
+  {"id":"L2-CART-FLOW","name":"Cart check/update/delete/count and stock-change hints","layer":"L2","severity":"P0","profiles":["pr","nightly"]},
+  {"id":"L2-ADDRESS-FLOW","name":"Address create/update/delete/default and region fallback","layer":"L2","severity":"P0","profiles":["pr","nightly"]},
+  {"id":"L2-CHECKOUT-FLOW","name":"Checkout freight/promotion/coupon candidates and selection writeback","layer":"L2","severity":"P0","profiles":["pr","nightly"]},
+  {"id":"L2-SUBMIT-FLOW","name":"Submit order online/offline/reorder with anti-tamper checks","layer":"L2","severity":"P0","profiles":["pr","nightly"]},
+  {"id":"L2-PAY-FLOW","name":"Prepay/notify success/duplicate notify idempotency","layer":"L2","severity":"P0","profiles":["pr","nightly"]},
+  {"id":"L2-ORDER-LIFECYCLE","name":"Order cancel/delete/confirm/timeout/express/status counters","layer":"L2","severity":"P0","profiles":["pr","nightly"]},
+  {"id":"L2-COUPON-LIFECYCLE","name":"Coupon center/receive/preview/lock/use/release and records","layer":"L2","severity":"P0","profiles":["pr","nightly"]},
+  {"id":"L2-PROMOTION-LIFECYCLE","name":"Promotion discount/direct-reduce and coupon mutual exclusion best-price","layer":"L2","severity":"P0","profiles":["pr","nightly"]},
+  {"id":"L2-INVITE-FLOW","name":"Invite code intake and invite summary/record APIs","layer":"L2","severity":"P2","profiles":["nightly"]},
+  {"id":"L2-AD-MESSAGE-FLOW","name":"Ad unread count, message list and readAll","layer":"L2","severity":"P2","profiles":["nightly"]},
+  {"id":"L2-OPERATIONS-FLOW","name":"Admin goods import task records and exports","layer":"L2","severity":"P2","profiles":["nightly"]},
+  {"id":"L2-SEARCH-FOOTPRINT","name":"Search keyword/helper/history and footprint list/delete","layer":"L2","severity":"P2","profiles":["nightly"]},
+
+  {"id":"L3-COUPON-CROSS-END","name":"Admin coupon config -> mini receive/preview -> order apply","layer":"L3","severity":"P1","profiles":["pr","nightly"]},
+  {"id":"L3-PROMOTION-CROSS-END","name":"Admin promotion config -> mini goods/checkout discount visible","layer":"L3","severity":"P1","profiles":["pr","nightly"]},
+  {"id":"L3-AD-CROSS-END","name":"Admin ad config -> mini home popup and ad message visibility","layer":"L3","severity":"P2","profiles":["pr","nightly"]},
+  {"id":"L3-ORDER-OPS-CROSS-END","name":"Admin order delivery/memo -> user-side order details consistency","layer":"L3","severity":"P1","profiles":["nightly"]},
+
+  {"id":"L4-MINI-REQUEST-SMOKE","name":"Mini request SDK smoke for 401/412/error handling","layer":"L4","severity":"P1","profiles":["pr","nightly"]},
+  {"id":"L4-MINI-SYNTAX-SMOKE","name":"Mini key page JS syntax smoke","layer":"L4","severity":"P2","profiles":["pr","nightly"]},
+  {"id":"L4-ADMIN-LOGIN-SMOKE","name":"Admin login and key operation API smoke","layer":"L4","severity":"P1","profiles":["pr","nightly"]},
+
+  {"id":"NIGHTLY-SECURITY-ABUSE","name":"Security abuse smoke (auth bypass, injection-like payloads)","layer":"L2","severity":"P1","profiles":["nightly"]},
+  {"id":"NIGHTLY-NOTIFY-CONCURRENCY","name":"Pay notify concurrency and idempotency consistency","layer":"L2","severity":"P0","profiles":["nightly"]},
+  {"id":"NIGHTLY-COS-REAL-SMOKE","name":"COS real upload smoke and URL availability","layer":"L4","severity":"P1","profiles":["nightly","pr"]},
+  {"id":"PRE-RELEASE-REAL-PAY","name":"Real-device real-payment end-to-end check","layer":"L2","severity":"P0","profiles":["pre-release"]},
+  {"id":"PRE-RELEASE-MANUAL-UI","name":"Manual UI checks for mini iOS/Android and admin critical pages","layer":"L4","severity":"P1","profiles":["pre-release"]}
+]
