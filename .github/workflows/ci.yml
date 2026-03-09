@@ -239,7 +239,8 @@ jobs:
             --db-port 3306 \
             --db-user "root" \
             --db-password "root" \
-            --db-name "hiolabsDB"
+            --db-name "hiolabsDB" \
+            --fail-on-severity "P0"
 
       - name: Stop server
         if: always()

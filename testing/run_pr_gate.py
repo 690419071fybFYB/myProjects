@@ -29,6 +29,8 @@ from testing.lib.common import (
     run_command,
 )
 
+SEVERITY_RANK = {"P0": 0, "P1": 1, "P2": 2, "P3": 3}
+
 
 def env_or(name: str, default: str = "") -> str:
     value = os.environ.get(name)
@@ -180,6 +182,12 @@ def main() -> int:
         default=env_or("TEST_DB_PASSWORD", env_or("MYSQL_PASSWORD", env_or("MYSQL_ROOT_PASSWORD", ""))),
     )
     parser.add_argument("--db-name", default=env_or("TEST_DB_NAME", env_or("MYSQL_DATABASE", "hiolabsDB")))
+    parser.add_argument(
+        "--fail-on-severity",
+        choices=["ALL", "P0", "P1", "P2", "P3"],
+        default=env_or("PR_GATE_FAIL_ON_SEVERITY", "ALL").upper(),
+        help="控制 gate 失败阈值。ALL=任意失败都阻塞；P0/P1/P2/P3=仅该级别及更高严重度阻塞。",
+    )
     args = parser.parse_args()
 
     workspace = Path(args.workspace).resolve()
@@ -416,11 +424,17 @@ def main() -> int:
     )
 
     failed = [r for r in merge_layer_results(layers) if r.status == "failed"]
+    if args.fail_on_severity == "ALL":
+        blocking_failed = failed
+    else:
+        threshold = SEVERITY_RANK[args.fail_on_severity]
+        blocking_failed = [r for r in failed if SEVERITY_RANK.get(r.severity, 99) <= threshold]
     print(f"PR gate report json: {json_path}")
     print(f"PR gate report md: {md_path}")
     print(f"Summary: {payload.get('summary')}")
     print(f"Failed checks: {len(failed)}")
-    return 1 if failed else 0
+    print(f"Blocking failed checks: {len(blocking_failed)} (threshold={args.fail_on_severity})")
+    return 1 if blocking_failed else 0
 
 
 if __name__ == "__main__":
