@@ -75,6 +75,14 @@ jobs:
             set -euo pipefail
             cd "$TARGET_DIR/deploy"
             bash scripts/migrate_remote.sh
-            curl -fsS http://127.0.0.1:8360/api/index/appInfo >/dev/null
-            echo "[OK] appInfo after migrations"
+            for i in {1..30}; do
+              if curl -fsS --max-time 5 http://127.0.0.1:8360/api/index/appInfo >/dev/null; then
+                echo "[OK] appInfo after migrations"
+                exit 0
+              fi
+              echo "[WAIT] appInfo not ready after migrations (${i}/30)"
+              sleep 2
+            done
+            echo "[ERROR] appInfo check failed after migrations"
+            exit 1
           EOF
