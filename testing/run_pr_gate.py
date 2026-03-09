@@ -109,7 +109,7 @@ def run_cos_real_smoke(
     admin_password: str,
     extra_env: Dict[str, str],
 ) -> CheckResult:
-    required = ("COS_SECRET_ID", "COS_SECRET_KEY", "COS_BUCKET")
+    required = ("COS_SECRET_ID", "COS_SECRET_KEY", "COS_BUCKET", "COS_REGION")
     missing = [name for name in required if not env_or(name)]
     if missing:
         return CheckResult(

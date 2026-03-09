@@ -176,6 +176,12 @@ jobs:
           FLUSH PRIVILEGES;
           SQL
           mysql -h127.0.0.1 -uroot -proot hiolabsDB < hioshop-server/hiolabsDB.sql
+          for migration in hioshop-server/sql/*.sql; do
+            if [ -f "$migration" ]; then
+              echo "Applying migration: $migration"
+              mysql -h127.0.0.1 -uroot -proot hiolabsDB < "$migration"
+            fi
+          done
 
       - name: Start server
         run: |
@@ -216,6 +222,9 @@ jobs:
           COS_BUCKET: ${{ secrets.COS_BUCKET }}
           COS_REGION: ${{ secrets.COS_REGION }}
           COS_DOMAIN: ${{ secrets.COS_DOMAIN }}
+          WEIXIN_PARTNER_KEY: ci_partner_key
+          WEIXIN_APPID: wx-ci
+          WEIXIN_MCH_ID: mch-ci
         run: |
           python3 testing/run_pr_gate.py \
             --workspace "$GITHUB_WORKSPACE" \
