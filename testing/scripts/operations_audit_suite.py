@@ -178,8 +178,8 @@ def run_suite(ctx: Context) -> CheckResult:
             if resp.status_code == 200 and len(resp.content or b"") > 0:
                 binary_checked = 1
             else:
-                # Some failed tasks may not have generated workbook; this should only be tolerated when error_rows is 0.
-                if int(task_row.get("error_rows") or 0) > 0:
+                # Some failed tasks may not have generated workbook; tolerate only when failed_sku is 0.
+                if int(task_row.get("failed_sku") or 0) > 0:
                     raise AssertionError(
                         f"importTaskErrorFile unavailable status={resp.status_code}, bytes={len(resp.content or b'')}"
                     )
