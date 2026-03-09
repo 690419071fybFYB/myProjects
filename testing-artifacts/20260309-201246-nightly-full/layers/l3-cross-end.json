@@ -1,0 +1,77 @@
+{
+  "suite": "L3-cross-end",
+  "results": [
+    {
+      "id": "L3-ADMIN-AUTH-PREREQ",
+      "name": "Admin auth prerequisite for cross-end checks",
+      "layer": "L3",
+      "status": "passed",
+      "severity": "P2",
+      "message": "admin token acquired",
+      "elapsed_seconds": 0.08789372444152832,
+      "evidence": "",
+      "command": ""
+    },
+    {
+      "id": "L3-COUPON-CROSS-END",
+      "name": "Admin coupon config -> mini receive/preview",
+      "layer": "L3",
+      "status": "passed",
+      "severity": "P1",
+      "message": "coupon_id=145, user_coupon_id=144",
+      "elapsed_seconds": 0.10939717292785645,
+      "evidence": "",
+      "command": ""
+    },
+    {
+      "id": "L3-PROMOTION-CROSS-END",
+      "name": "Admin promotion config -> mini goods detail",
+      "layer": "L3",
+      "status": "passed",
+      "severity": "P1",
+      "message": "promotion_id=23, goods_id=1009012",
+      "elapsed_seconds": 0.14259600639343262,
+      "evidence": "",
+      "command": ""
+    },
+    {
+      "id": "L3-CROSS-END-SUITE",
+      "name": "Cross-end suite runtime",
+      "layer": "L3",
+      "status": "failed",
+      "severity": "P1",
+      "message": "ad create unexpected errno=100, status=200, errmsg=该商品已经有广告关联",
+      "elapsed_seconds": 0.15068888664245605,
+      "evidence": "",
+      "command": ""
+    },
+    {
+      "id": "L3-AD-CROSS-END",
+      "name": "Admin ad config -> mini appInfo + ad messages",
+      "layer": "L3",
+      "status": "failed",
+      "severity": "P2",
+      "message": "blocked by cross-end suite runtime error: ad create unexpected errno=100, status=200, errmsg=该商品已经有广告关联",
+      "elapsed_seconds": 0.15069293975830078,
+      "evidence": "",
+      "command": ""
+    },
+    {
+      "id": "L3-ORDER-OPS-CROSS-END",
+      "name": "Admin order memo/status -> mini order detail consistency",
+      "layer": "L3",
+      "status": "failed",
+      "severity": "P1",
+      "message": "blocked by cross-end suite runtime error: ad create unexpected errno=100, status=200, errmsg=该商品已经有广告关联",
+      "elapsed_seconds": 0.1506938934326172,
+      "evidence": "",
+      "command": ""
+    }
+  ],
+  "summary": {
+    "total": 6,
+    "passed": 3,
+    "failed": 3,
+    "skipped": 0
+  }
+}

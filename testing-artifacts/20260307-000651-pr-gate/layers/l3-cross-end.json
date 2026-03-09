@@ -1,0 +1,22 @@
+{
+  "suite": "L3-cross-end",
+  "results": [
+    {
+      "id": "L3-CROSS-END-SUITE",
+      "name": "Cross-end suite runtime",
+      "layer": "L3",
+      "status": "failed",
+      "severity": "P1",
+      "message": "(1045, \"Access denied for user 'root'@'172.18.0.1' (using password: YES)\")",
+      "elapsed_seconds": 0.003325939178466797,
+      "evidence": "",
+      "command": ""
+    }
+  ],
+  "summary": {
+    "total": 1,
+    "passed": 0,
+    "failed": 1,
+    "skipped": 0
+  }
+}

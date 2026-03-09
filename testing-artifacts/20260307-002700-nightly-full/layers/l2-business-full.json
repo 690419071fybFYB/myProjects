@@ -1,0 +1,177 @@
+{
+  "suite": "L2-business",
+  "scope": "full",
+  "results": [
+    {
+      "id": "L2-HOME-PAGE",
+      "name": "Home page load and popup/channel visibility",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P1",
+      "message": "request error: HTTPConnectionPool(host='127.0.0.1', port=1): Max retries exceeded with url: /api/index/index (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=1): Failed to establish a new connection: [Errno 61] Connection refused\"))",
+      "elapsed_seconds": 0.0011858940124511719,
+      "evidence": "",
+      "command": "GET /api/index/index + GET /api/index/appInfo"
+    },
+    {
+      "id": "L2-LOGIN-GATE",
+      "name": "Login gate and profile completeness checks",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "core user journey failed: (1045, \"Access denied for user 'root'@'172.18.0.1' (using password: YES)\")",
+      "elapsed_seconds": 0.20928716659545898,
+      "evidence": "/Volumes/SAMSUNG/fyb/.global_env/lib/python3.13/site-packages/jwt/api_jwt.py:153: InsecureKeyLengthWarning: The HMAC key is 1 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.\n  return self._jws.encode(",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:1 --api-jwt-secret a --api-user-id 1 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password root --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-GOODS-FLOW",
+      "name": "Goods detail/spec/add-cart/buy-now flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "core user journey failed: (1045, \"Access denied for user 'root'@'172.18.0.1' (using password: YES)\")",
+      "elapsed_seconds": 0.20928716659545898,
+      "evidence": "/Volumes/SAMSUNG/fyb/.global_env/lib/python3.13/site-packages/jwt/api_jwt.py:153: InsecureKeyLengthWarning: The HMAC key is 1 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.\n  return self._jws.encode(",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:1 --api-jwt-secret a --api-user-id 1 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password root --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-CART-FLOW",
+      "name": "Cart select/update/delete/count flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "core user journey failed: (1045, \"Access denied for user 'root'@'172.18.0.1' (using password: YES)\")",
+      "elapsed_seconds": 0.20928716659545898,
+      "evidence": "/Volumes/SAMSUNG/fyb/.global_env/lib/python3.13/site-packages/jwt/api_jwt.py:153: InsecureKeyLengthWarning: The HMAC key is 1 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.\n  return self._jws.encode(",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:1 --api-jwt-secret a --api-user-id 1 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password root --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-ADDRESS-FLOW",
+      "name": "Address create/default/use flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "core user journey failed: (1045, \"Access denied for user 'root'@'172.18.0.1' (using password: YES)\")",
+      "elapsed_seconds": 0.20928716659545898,
+      "evidence": "/Volumes/SAMSUNG/fyb/.global_env/lib/python3.13/site-packages/jwt/api_jwt.py:153: InsecureKeyLengthWarning: The HMAC key is 1 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.\n  return self._jws.encode(",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:1 --api-jwt-secret a --api-user-id 1 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password root --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-CHECKOUT-FLOW",
+      "name": "Checkout freight/promotion/coupon flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "core user journey failed: (1045, \"Access denied for user 'root'@'172.18.0.1' (using password: YES)\")",
+      "elapsed_seconds": 0.20928716659545898,
+      "evidence": "/Volumes/SAMSUNG/fyb/.global_env/lib/python3.13/site-packages/jwt/api_jwt.py:153: InsecureKeyLengthWarning: The HMAC key is 1 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.\n  return self._jws.encode(",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:1 --api-jwt-secret a --api-user-id 1 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password root --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-SUBMIT-FLOW",
+      "name": "Submit order and anti-tamper flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "core user journey failed: (1045, \"Access denied for user 'root'@'172.18.0.1' (using password: YES)\")",
+      "elapsed_seconds": 0.20928716659545898,
+      "evidence": "/Volumes/SAMSUNG/fyb/.global_env/lib/python3.13/site-packages/jwt/api_jwt.py:153: InsecureKeyLengthWarning: The HMAC key is 1 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.\n  return self._jws.encode(",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:1 --api-jwt-secret a --api-user-id 1 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password root --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-ORDER-LIFECYCLE",
+      "name": "Order lifecycle cancel/status flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "core user journey failed: (1045, \"Access denied for user 'root'@'172.18.0.1' (using password: YES)\")",
+      "elapsed_seconds": 0.20928716659545898,
+      "evidence": "/Volumes/SAMSUNG/fyb/.global_env/lib/python3.13/site-packages/jwt/api_jwt.py:153: InsecureKeyLengthWarning: The HMAC key is 1 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.\n  return self._jws.encode(",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:1 --api-jwt-secret a --api-user-id 1 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password root --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-PAY-FLOW",
+      "name": "Pay notify and idempotency flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "pymysql.err.OperationalError: (1045, \"Access denied for user 'root'@'172.18.0.1' (using password: YES)\")",
+      "elapsed_seconds": 0.7112560272216797,
+      "evidence": "Traceback (most recent call last):\n  File \"/Volumes/SAMSUNG/fyb/myProjects/testing/scripts/pay_notify_concurrency.py\", line 383, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File \"/Volumes/SAMSUNG/fyb/myProjects/testing/scripts/pay_notify_concurrency.py\", line 315, in main\n    conn = db_connect(args.db_host, args.db_port, args.db_user, args.db_password, args.db_name)\n  File \"/Volumes/SAMSUNG/fyb/myProjects/testing/scripts/pay_notify_concurrency.py\", line 45, in db_conne",
+      "command": "python3 testing/scripts/pay_notify_concurrency.py --base-url http://127.0.0.1:1 --workers 1 --user-id 1 --api-jwt-secret a --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password root --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-COUPON-LIFECYCLE",
+      "name": "Coupon receive/preview/lock/use/release flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "Coupon 自动化测试失败: Access denied for user 'root'@'172.18.0.1' (using password: YES)",
+      "elapsed_seconds": 0.12413907051086426,
+      "evidence": "Coupon 自动化测试失败: Access denied for user 'root'@'172.18.0.1' (using password: YES)",
+      "command": "node scripts/test-coupon.js"
+    },
+    {
+      "id": "L2-PROMOTION-LIFECYCLE",
+      "name": "Promotion and best-price flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "开始执行 Promotion V1 mock 联调验证...",
+      "elapsed_seconds": 0.03117203712463379,
+      "evidence": "Promotion V1 mock 联调验证失败: service.previewCartPromotions is not a function",
+      "command": "node scripts/test-promotion-v1.js"
+    },
+    {
+      "id": "L2-OPERATIONS-FLOW",
+      "name": "Admin import/export operation flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P2",
+      "message": "fetch failed",
+      "elapsed_seconds": 0.26584911346435547,
+      "evidence": "=== 商品批量导入自动化测试失败 ===\nfetch failed",
+      "command": "node scripts/test-goods-import.js"
+    },
+    {
+      "id": "L2-INVITE-FLOW",
+      "name": "Invite summary and records flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P2",
+      "message": "pymysql.err.OperationalError: (1045, \"Access denied for user 'root'@'172.18.0.1' (using password: YES)\")",
+      "elapsed_seconds": 0.13515329360961914,
+      "evidence": "/Volumes/SAMSUNG/fyb/.global_env/lib/python3.13/site-packages/jwt/api_jwt.py:153: InsecureKeyLengthWarning: The HMAC key is 1 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.\n  return self._jws.encode(\nTraceback (most recent call last):\n  File \"/Volumes/SAMSUNG/fyb/myProjects/testing/scripts/domain_flow_suite.py\", line 384, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File \"/Volumes/SAMSUNG/fyb/myProjects/testin",
+      "command": "python3 testing/scripts/domain_flow_suite.py --base-url http://127.0.0.1:1 --api-jwt-secret a --api-user-id 1 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password root --db-name hiolabsDB --output /Volumes/SAMSUNG/fyb/myProjects/testing-artifacts/domain-suite-1772814422.json"
+    },
+    {
+      "id": "L2-AD-MESSAGE-FLOW",
+      "name": "Ad unread/list/readAll flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P2",
+      "message": "pymysql.err.OperationalError: (1045, \"Access denied for user 'root'@'172.18.0.1' (using password: YES)\")",
+      "elapsed_seconds": 0.13515329360961914,
+      "evidence": "/Volumes/SAMSUNG/fyb/.global_env/lib/python3.13/site-packages/jwt/api_jwt.py:153: InsecureKeyLengthWarning: The HMAC key is 1 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.\n  return self._jws.encode(\nTraceback (most recent call last):\n  File \"/Volumes/SAMSUNG/fyb/myProjects/testing/scripts/domain_flow_suite.py\", line 384, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File \"/Volumes/SAMSUNG/fyb/myProjects/testin",
+      "command": "python3 testing/scripts/domain_flow_suite.py --base-url http://127.0.0.1:1 --api-jwt-secret a --api-user-id 1 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password root --db-name hiolabsDB --output /Volumes/SAMSUNG/fyb/myProjects/testing-artifacts/domain-suite-1772814422.json"
+    },
+    {
+      "id": "L2-SEARCH-FOOTPRINT",
+      "name": "Search and footprint flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P2",
+      "message": "pymysql.err.OperationalError: (1045, \"Access denied for user 'root'@'172.18.0.1' (using password: YES)\")",
+      "elapsed_seconds": 0.13515329360961914,
+      "evidence": "/Volumes/SAMSUNG/fyb/.global_env/lib/python3.13/site-packages/jwt/api_jwt.py:153: InsecureKeyLengthWarning: The HMAC key is 1 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.\n  return self._jws.encode(\nTraceback (most recent call last):\n  File \"/Volumes/SAMSUNG/fyb/myProjects/testing/scripts/domain_flow_suite.py\", line 384, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File \"/Volumes/SAMSUNG/fyb/myProjects/testin",
+      "command": "python3 testing/scripts/domain_flow_suite.py --base-url http://127.0.0.1:1 --api-jwt-secret a --api-user-id 1 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password root --db-name hiolabsDB --output /Volumes/SAMSUNG/fyb/myProjects/testing-artifacts/domain-suite-1772814422.json"
+    }
+  ],
+  "summary": {
+    "total": 15,
+    "passed": 0,
+    "failed": 15,
+    "skipped": 0
+  }
+}

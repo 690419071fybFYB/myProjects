@@ -1,0 +1,177 @@
+{
+  "suite": "L2-business",
+  "scope": "full",
+  "results": [
+    {
+      "id": "L2-HOME-PAGE",
+      "name": "Home page load and popup/channel visibility",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P1",
+      "message": "request error: HTTPConnectionPool(host='127.0.0.1', port=8360): Max retries exceeded with url: /api/index/index (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8360): Failed to establish a new connection: [Errno 1] Operation not permitted\"))",
+      "elapsed_seconds": 0.0005459785461425781,
+      "evidence": "",
+      "command": "GET /api/index/index + GET /api/index/appInfo"
+    },
+    {
+      "id": "L2-LOGIN-GATE",
+      "name": "Login gate and profile completeness checks",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "core user journey failed: (2003, \"Can't connect to MySQL server on '127.0.0.1' ([Errno 1] Operation not permitted)\")",
+      "elapsed_seconds": 0.1359851360321045,
+      "evidence": "core user journey failed: (2003, \"Can't connect to MySQL server on '127.0.0.1' ([Errno 1] Operation not permitted)\")",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:8360 --api-jwt-secret bae4fdabcc11cba5bb4aa9225bdbda8a936b41d729e86a65f44c02313d839278 --api-user-id 1 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password CHANGE_ME_STRONG_PASSWORD --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-GOODS-FLOW",
+      "name": "Goods detail/spec/add-cart/buy-now flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "core user journey failed: (2003, \"Can't connect to MySQL server on '127.0.0.1' ([Errno 1] Operation not permitted)\")",
+      "elapsed_seconds": 0.1359851360321045,
+      "evidence": "core user journey failed: (2003, \"Can't connect to MySQL server on '127.0.0.1' ([Errno 1] Operation not permitted)\")",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:8360 --api-jwt-secret bae4fdabcc11cba5bb4aa9225bdbda8a936b41d729e86a65f44c02313d839278 --api-user-id 1 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password CHANGE_ME_STRONG_PASSWORD --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-CART-FLOW",
+      "name": "Cart select/update/delete/count flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "core user journey failed: (2003, \"Can't connect to MySQL server on '127.0.0.1' ([Errno 1] Operation not permitted)\")",
+      "elapsed_seconds": 0.1359851360321045,
+      "evidence": "core user journey failed: (2003, \"Can't connect to MySQL server on '127.0.0.1' ([Errno 1] Operation not permitted)\")",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:8360 --api-jwt-secret bae4fdabcc11cba5bb4aa9225bdbda8a936b41d729e86a65f44c02313d839278 --api-user-id 1 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password CHANGE_ME_STRONG_PASSWORD --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-ADDRESS-FLOW",
+      "name": "Address create/default/use flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "core user journey failed: (2003, \"Can't connect to MySQL server on '127.0.0.1' ([Errno 1] Operation not permitted)\")",
+      "elapsed_seconds": 0.1359851360321045,
+      "evidence": "core user journey failed: (2003, \"Can't connect to MySQL server on '127.0.0.1' ([Errno 1] Operation not permitted)\")",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:8360 --api-jwt-secret bae4fdabcc11cba5bb4aa9225bdbda8a936b41d729e86a65f44c02313d839278 --api-user-id 1 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password CHANGE_ME_STRONG_PASSWORD --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-CHECKOUT-FLOW",
+      "name": "Checkout freight/promotion/coupon flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "core user journey failed: (2003, \"Can't connect to MySQL server on '127.0.0.1' ([Errno 1] Operation not permitted)\")",
+      "elapsed_seconds": 0.1359851360321045,
+      "evidence": "core user journey failed: (2003, \"Can't connect to MySQL server on '127.0.0.1' ([Errno 1] Operation not permitted)\")",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:8360 --api-jwt-secret bae4fdabcc11cba5bb4aa9225bdbda8a936b41d729e86a65f44c02313d839278 --api-user-id 1 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password CHANGE_ME_STRONG_PASSWORD --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-SUBMIT-FLOW",
+      "name": "Submit order and anti-tamper flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "core user journey failed: (2003, \"Can't connect to MySQL server on '127.0.0.1' ([Errno 1] Operation not permitted)\")",
+      "elapsed_seconds": 0.1359851360321045,
+      "evidence": "core user journey failed: (2003, \"Can't connect to MySQL server on '127.0.0.1' ([Errno 1] Operation not permitted)\")",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:8360 --api-jwt-secret bae4fdabcc11cba5bb4aa9225bdbda8a936b41d729e86a65f44c02313d839278 --api-user-id 1 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password CHANGE_ME_STRONG_PASSWORD --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-ORDER-LIFECYCLE",
+      "name": "Order lifecycle cancel/status flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "core user journey failed: (2003, \"Can't connect to MySQL server on '127.0.0.1' ([Errno 1] Operation not permitted)\")",
+      "elapsed_seconds": 0.1359851360321045,
+      "evidence": "core user journey failed: (2003, \"Can't connect to MySQL server on '127.0.0.1' ([Errno 1] Operation not permitted)\")",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:8360 --api-jwt-secret bae4fdabcc11cba5bb4aa9225bdbda8a936b41d729e86a65f44c02313d839278 --api-user-id 1 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password CHANGE_ME_STRONG_PASSWORD --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-PAY-FLOW",
+      "name": "Pay notify and idempotency flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "pymysql.err.OperationalError: (2003, \"Can't connect to MySQL server on '127.0.0.1' ([Errno 1] Operation not permitted)\")",
+      "elapsed_seconds": 0.46895313262939453,
+      "evidence": "Traceback (most recent call last):\n  File \"/Volumes/SAMSUNG/fyb/.global_env/lib/python3.13/site-packages/pymysql/connections.py\", line 661, in connect\n    sock = socket.create_connection(\n        (self.host, self.port), self.connect_timeout, **kwargs\n    )\n  File \"/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/socket.py\", line 864, in create_connection\n    raise exceptions[0]\n  File \"/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.f",
+      "command": "python3 testing/scripts/pay_notify_concurrency.py --base-url http://127.0.0.1:8360 --workers 1 --user-id 1 --api-jwt-secret bae4fdabcc11cba5bb4aa9225bdbda8a936b41d729e86a65f44c02313d839278 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password CHANGE_ME_STRONG_PASSWORD --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-COUPON-LIFECYCLE",
+      "name": "Coupon receive/preview/lock/use/release flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "Coupon 自动化测试失败: connect EPERM 127.0.0.1:3306 - Local (0.0.0.0:0)",
+      "elapsed_seconds": 0.23521995544433594,
+      "evidence": "Coupon 自动化测试失败: connect EPERM 127.0.0.1:3306 - Local (0.0.0.0:0)",
+      "command": "node scripts/test-coupon.js"
+    },
+    {
+      "id": "L2-PROMOTION-LIFECYCLE",
+      "name": "Promotion and best-price flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "开始执行 Promotion V1 mock 联调验证...",
+      "elapsed_seconds": 0.0272519588470459,
+      "evidence": "Promotion V1 mock 联调验证失败: service.previewCartPromotions is not a function",
+      "command": "node scripts/test-promotion-v1.js"
+    },
+    {
+      "id": "L2-OPERATIONS-FLOW",
+      "name": "Admin goods import task records and exports",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P2",
+      "message": "import_script=failed; operations_audit=failed",
+      "elapsed_seconds": 0.4501464366912842,
+      "evidence": "import:fetch failed; audit:pymysql.err.OperationalError: (2003, \"Can't connect to MySQL server on '127.0.0.1' ([Errno 1] Operation not permitted)\")",
+      "command": "node scripts/test-goods-import.js && python3 testing/scripts/operations_audit_suite.py --base-url http://127.0.0.1:8360 --admin-username qilelab.com --admin-password qilelab.com --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password CHANGE_ME_STRONG_PASSWORD --db-name hiolabsDB --output /Volumes/SAMSUNG/fyb/myProjects/testing-artifacts/operations-audit-1773057100.json"
+    },
+    {
+      "id": "L2-INVITE-FLOW",
+      "name": "Invite summary and records flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P2",
+      "message": "pymysql.err.OperationalError: (2003, \"Can't connect to MySQL server on '127.0.0.1' ([Errno 1] Operation not permitted)\")",
+      "elapsed_seconds": 0.11592769622802734,
+      "evidence": "Traceback (most recent call last):\n  File \"/Volumes/SAMSUNG/fyb/.global_env/lib/python3.13/site-packages/pymysql/connections.py\", line 661, in connect\n    sock = socket.create_connection(\n        (self.host, self.port), self.connect_timeout, **kwargs\n    )\n  File \"/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/socket.py\", line 864, in create_connection\n    raise exceptions[0]\n  File \"/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.f",
+      "command": "python3 testing/scripts/domain_flow_suite.py --base-url http://127.0.0.1:8360 --api-jwt-secret bae4fdabcc11cba5bb4aa9225bdbda8a936b41d729e86a65f44c02313d839278 --api-user-id 1 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password CHANGE_ME_STRONG_PASSWORD --db-name hiolabsDB --output /Volumes/SAMSUNG/fyb/myProjects/testing-artifacts/domain-suite-1773057100.json"
+    },
+    {
+      "id": "L2-AD-MESSAGE-FLOW",
+      "name": "Ad unread/list/readAll flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P2",
+      "message": "pymysql.err.OperationalError: (2003, \"Can't connect to MySQL server on '127.0.0.1' ([Errno 1] Operation not permitted)\")",
+      "elapsed_seconds": 0.11592769622802734,
+      "evidence": "Traceback (most recent call last):\n  File \"/Volumes/SAMSUNG/fyb/.global_env/lib/python3.13/site-packages/pymysql/connections.py\", line 661, in connect\n    sock = socket.create_connection(\n        (self.host, self.port), self.connect_timeout, **kwargs\n    )\n  File \"/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/socket.py\", line 864, in create_connection\n    raise exceptions[0]\n  File \"/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.f",
+      "command": "python3 testing/scripts/domain_flow_suite.py --base-url http://127.0.0.1:8360 --api-jwt-secret bae4fdabcc11cba5bb4aa9225bdbda8a936b41d729e86a65f44c02313d839278 --api-user-id 1 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password CHANGE_ME_STRONG_PASSWORD --db-name hiolabsDB --output /Volumes/SAMSUNG/fyb/myProjects/testing-artifacts/domain-suite-1773057100.json"
+    },
+    {
+      "id": "L2-SEARCH-FOOTPRINT",
+      "name": "Search and footprint flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P2",
+      "message": "pymysql.err.OperationalError: (2003, \"Can't connect to MySQL server on '127.0.0.1' ([Errno 1] Operation not permitted)\")",
+      "elapsed_seconds": 0.11592769622802734,
+      "evidence": "Traceback (most recent call last):\n  File \"/Volumes/SAMSUNG/fyb/.global_env/lib/python3.13/site-packages/pymysql/connections.py\", line 661, in connect\n    sock = socket.create_connection(\n        (self.host, self.port), self.connect_timeout, **kwargs\n    )\n  File \"/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/socket.py\", line 864, in create_connection\n    raise exceptions[0]\n  File \"/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.f",
+      "command": "python3 testing/scripts/domain_flow_suite.py --base-url http://127.0.0.1:8360 --api-jwt-secret bae4fdabcc11cba5bb4aa9225bdbda8a936b41d729e86a65f44c02313d839278 --api-user-id 1 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password CHANGE_ME_STRONG_PASSWORD --db-name hiolabsDB --output /Volumes/SAMSUNG/fyb/myProjects/testing-artifacts/domain-suite-1773057100.json"
+    }
+  ],
+  "summary": {
+    "total": 15,
+    "passed": 0,
+    "failed": 15,
+    "skipped": 0
+  }
+}

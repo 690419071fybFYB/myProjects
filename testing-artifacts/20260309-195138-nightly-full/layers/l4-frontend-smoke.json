@@ -1,0 +1,44 @@
+{
+  "suite": "L4-frontend-smoke",
+  "results": [
+    {
+      "id": "L4-MINI-REQUEST-SMOKE",
+      "name": "Mini request SDK smoke",
+      "layer": "L4",
+      "status": "passed",
+      "severity": "P1",
+      "message": "401/412/network handling smoke passed",
+      "elapsed_seconds": 0.03744196891784668,
+      "evidence": "",
+      "command": "node testing/scripts/miniprogram_request_smoke.js"
+    },
+    {
+      "id": "L4-MINI-SYNTAX-SMOKE",
+      "name": "Mini key page JS syntax smoke",
+      "layer": "L4",
+      "status": "passed",
+      "severity": "P2",
+      "message": "syntax checks passed",
+      "elapsed_seconds": 0.13338017463684082,
+      "evidence": "",
+      "command": "node -c app.js && node -c utils/request/index.js && node -c utils/util.js && node -c pages/order-check/index.js && node -c pages/order-coupon/index.js && node -c pages/ucenter/index/index.js"
+    },
+    {
+      "id": "L4-ADMIN-LOGIN-SMOKE",
+      "name": "Admin login smoke",
+      "layer": "L4",
+      "status": "failed",
+      "severity": "P1",
+      "message": "request error: HTTPConnectionPool(host='127.0.0.1', port=8360): Max retries exceeded with url: /admin/auth/login (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8360): Failed to establish a new connection: [Errno 1] Operation not permitted\"))",
+      "elapsed_seconds": 0.0016140937805175781,
+      "evidence": "",
+      "command": "POST /admin/auth/login"
+    }
+  ],
+  "summary": {
+    "total": 3,
+    "passed": 2,
+    "failed": 1,
+    "skipped": 0
+  }
+}

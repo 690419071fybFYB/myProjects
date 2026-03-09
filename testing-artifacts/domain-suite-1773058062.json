@@ -1,0 +1,44 @@
+{
+  "suite": "L2-domain-long-tail",
+  "results": [
+    {
+      "id": "L2-INVITE-FLOW",
+      "name": "Invite summary/records and optional relation consistency",
+      "layer": "L2",
+      "status": "passed",
+      "severity": "P2",
+      "message": "schema_ready=1, invite_total=0",
+      "elapsed_seconds": 0.04930996894836426,
+      "evidence": "",
+      "command": "GET /api/invite/mySummary + GET /api/invite/myRecords"
+    },
+    {
+      "id": "L2-AD-MESSAGE-FLOW",
+      "name": "Ad unread/messages/readAll consistency",
+      "layer": "L2",
+      "status": "passed",
+      "severity": "P2",
+      "message": "before=0, after=0, user_ad_read_before=2, user_ad_read_after=2",
+      "elapsed_seconds": 0.024946212768554688,
+      "evidence": "",
+      "command": "GET /api/ad/unreadCount + GET /api/ad/messages + POST /api/ad/readAll"
+    },
+    {
+      "id": "L2-SEARCH-FOOTPRINT",
+      "name": "Search history and footprint create/list/delete consistency",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P2",
+      "message": "footprint list unexpected errno=412, status=200, errmsg=请先完善登录资料",
+      "elapsed_seconds": 0.02223491668701172,
+      "evidence": "",
+      "command": "search index/clear + footprint list/delete"
+    }
+  ],
+  "summary": {
+    "total": 3,
+    "passed": 2,
+    "failed": 1,
+    "skipped": 0
+  }
+}

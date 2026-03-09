@@ -1,0 +1,22 @@
+{
+  "suite": "L2-operations-audit",
+  "results": [
+    {
+      "id": "L2-OPERATIONS-FLOW",
+      "name": "Goods import task list/detail/error-file and DB consistency",
+      "layer": "L2",
+      "status": "passed",
+      "severity": "P2",
+      "message": "task_id=89, status=partial_success, total=1, success=0, skipped=1, failed=0, error_file_checked=1",
+      "elapsed_seconds": 0.12986278533935547,
+      "evidence": "",
+      "command": "GET /admin/goods/importTaskList + detail + errorFile + DB assert"
+    }
+  ],
+  "summary": {
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0
+  }
+}

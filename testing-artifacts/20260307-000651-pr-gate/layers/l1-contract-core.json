@@ -1,0 +1,101 @@
+{
+  "suite": "L1-contract",
+  "scope": "core",
+  "base_url": "http://127.0.0.1:1",
+  "results": [
+    {
+      "id": "L1-CORE-AUTH",
+      "name": "Auth loginByWeixin contract",
+      "layer": "L1",
+      "status": "failed",
+      "severity": "P1",
+      "message": "request error: HTTPConnectionPool(host='127.0.0.1', port=1): Max retries exceeded with url: /api/auth/loginByWeixin (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=1): Failed to establish a new connection: [Errno 61] Connection refused\"))",
+      "elapsed_seconds": 0.0009109973907470703,
+      "evidence": "",
+      "command": "POST /api/auth/loginByWeixin"
+    },
+    {
+      "id": "L1-CORE-CART",
+      "name": "Cart core contract",
+      "layer": "L1",
+      "status": "failed",
+      "severity": "P1",
+      "message": "request error: HTTPConnectionPool(host='127.0.0.1', port=1): Max retries exceeded with url: /api/cart/index?page=1&size=1 (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=1): Failed to establish a new connection: [Errno 61] Connection refused\"))",
+      "elapsed_seconds": 0.0003218650817871094,
+      "evidence": "",
+      "command": "GET /api/cart/index"
+    },
+    {
+      "id": "L1-CORE-ORDER",
+      "name": "Order core contract",
+      "layer": "L1",
+      "status": "failed",
+      "severity": "P1",
+      "message": "request error: HTTPConnectionPool(host='127.0.0.1', port=1): Max retries exceeded with url: /api/order/list?page=1&size=1&showType=0 (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=1): Failed to establish a new connection: [Errno 61] Connection refused\"))",
+      "elapsed_seconds": 0.00023221969604492188,
+      "evidence": "",
+      "command": "GET /api/order/list"
+    },
+    {
+      "id": "L1-CORE-PAY",
+      "name": "Pay core contract",
+      "layer": "L1",
+      "status": "failed",
+      "severity": "P1",
+      "message": "request error: HTTPConnectionPool(host='127.0.0.1', port=1): Max retries exceeded with url: /api/pay/notify (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=1): Failed to establish a new connection: [Errno 61] Connection refused\"))",
+      "elapsed_seconds": 0.00020122528076171875,
+      "evidence": "",
+      "command": "POST /api/pay/notify"
+    },
+    {
+      "id": "L1-CORE-COUPON",
+      "name": "Coupon core contract",
+      "layer": "L1",
+      "status": "failed",
+      "severity": "P1",
+      "message": "request error: HTTPConnectionPool(host='127.0.0.1', port=1): Max retries exceeded with url: /api/coupon/center?page=1&size=1 (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=1): Failed to establish a new connection: [Errno 61] Connection refused\"))",
+      "elapsed_seconds": 0.00025010108947753906,
+      "evidence": "",
+      "command": "GET /api/coupon/center"
+    },
+    {
+      "id": "L1-CORE-ADDRESS",
+      "name": "Address core contract",
+      "layer": "L1",
+      "status": "failed",
+      "severity": "P1",
+      "message": "request error: HTTPConnectionPool(host='127.0.0.1', port=1): Max retries exceeded with url: /api/address/getAddresses (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=1): Failed to establish a new connection: [Errno 61] Connection refused\"))",
+      "elapsed_seconds": 0.00020885467529296875,
+      "evidence": "",
+      "command": "GET /api/address/getAddresses"
+    },
+    {
+      "id": "L1-CORE-SETTINGS",
+      "name": "Settings contract",
+      "layer": "L1",
+      "status": "failed",
+      "severity": "P2",
+      "message": "request error: HTTPConnectionPool(host='127.0.0.1', port=1): Max retries exceeded with url: /api/settings/showSettings (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=1): Failed to establish a new connection: [Errno 61] Connection refused\"))",
+      "elapsed_seconds": 0.0002269744873046875,
+      "evidence": "",
+      "command": "GET /api/settings/showSettings"
+    },
+    {
+      "id": "L1-CORE-AD",
+      "name": "Ad message contract",
+      "layer": "L1",
+      "status": "failed",
+      "severity": "P2",
+      "message": "request error: HTTPConnectionPool(host='127.0.0.1', port=1): Max retries exceeded with url: /api/ad/messages?page=1&size=1 (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=1): Failed to establish a new connection: [Errno 61] Connection refused\"))",
+      "elapsed_seconds": 0.00018715858459472656,
+      "evidence": "",
+      "command": "GET /api/ad/messages"
+    }
+  ],
+  "summary": {
+    "total": 8,
+    "passed": 0,
+    "failed": 8,
+    "skipped": 0
+  }
+}

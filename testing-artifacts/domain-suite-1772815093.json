@@ -1,0 +1,22 @@
+{
+  "suite": "L2-domain-long-tail",
+  "results": [
+    {
+      "id": "L2-DOMAIN-SUITE",
+      "name": "Domain long-tail suite",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P2",
+      "message": "missing API_JWT_SECRET",
+      "elapsed_seconds": 0.0,
+      "evidence": "",
+      "command": ""
+    }
+  ],
+  "summary": {
+    "total": 1,
+    "passed": 0,
+    "failed": 1,
+    "skipped": 0
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "suite": "L3-cross-end",
+  "results": [
+    {
+      "id": "L3-CROSS-END-SUITE",
+      "name": "Cross-end suite runtime",
+      "layer": "L3",
+      "status": "failed",
+      "severity": "P1",
+      "message": "(2003, \"Can't connect to MySQL server on '127.0.0.1' ([Errno 1] Operation not permitted)\")",
+      "elapsed_seconds": 0.0007569789886474609,
+      "evidence": "",
+      "command": ""
+    },
+    {
+      "id": "L3-COUPON-CROSS-END",
+      "name": "Admin coupon config -> mini receive/preview",
+      "layer": "L3",
+      "status": "failed",
+      "severity": "P1",
+      "message": "blocked by cross-end suite runtime error: (2003, \"Can't connect to MySQL server on '127.0.0.1' ([Errno 1] Operation not permitted)\")",
+      "elapsed_seconds": 0.0007607936859130859,
+      "evidence": "",
+      "command": ""
+    },
+    {
+      "id": "L3-PROMOTION-CROSS-END",
+      "name": "Admin promotion config -> mini goods detail",
+      "layer": "L3",
+      "status": "failed",
+      "severity": "P1",
+      "message": "blocked by cross-end suite runtime error: (2003, \"Can't connect to MySQL server on '127.0.0.1' ([Errno 1] Operation not permitted)\")",
+      "elapsed_seconds": 0.000762939453125,
+      "evidence": "",
+      "command": ""
+    },
+    {
+      "id": "L3-AD-CROSS-END",
+      "name": "Admin ad config -> mini appInfo + ad messages",
+      "layer": "L3",
+      "status": "failed",
+      "severity": "P2",
+      "message": "blocked by cross-end suite runtime error: (2003, \"Can't connect to MySQL server on '127.0.0.1' ([Errno 1] Operation not permitted)\")",
+      "elapsed_seconds": 0.0007638931274414062,
+      "evidence": "",
+      "command": ""
+    },
+    {
+      "id": "L3-ORDER-OPS-CROSS-END",
+      "name": "Admin order memo/status -> mini order detail consistency",
+      "layer": "L3",
+      "status": "failed",
+      "severity": "P1",
+      "message": "blocked by cross-end suite runtime error: (2003, \"Can't connect to MySQL server on '127.0.0.1' ([Errno 1] Operation not permitted)\")",
+      "elapsed_seconds": 0.0007648468017578125,
+      "evidence": "",
+      "command": ""
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 0,
+    "failed": 5,
+    "skipped": 0
+  }
+}

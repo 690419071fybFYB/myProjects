@@ -1,0 +1,155 @@
+{
+  "suite": "L2-business",
+  "scope": "full",
+  "results": [
+    {
+      "id": "L2-HOME-PAGE",
+      "name": "Home page load and popup/channel visibility",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P1",
+      "message": "request error: Expecting value: line 1 column 1 (char 0)",
+      "elapsed_seconds": 0.20522212982177734,
+      "evidence": "",
+      "command": "GET /api/index/index + GET /api/index/appInfo"
+    },
+    {
+      "id": "L2-LOGIN-GATE",
+      "name": "Login gate and profile completeness checks",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "core user journey failed: missing API_JWT_SECRET for core user journey",
+      "elapsed_seconds": 0.15147614479064941,
+      "evidence": "core user journey failed: missing API_JWT_SECRET for core user journey",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:8360 --api-jwt-secret '' --api-user-id 1 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password '' --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-GOODS-FLOW",
+      "name": "Goods detail/spec/add-cart/buy-now flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "core user journey failed: missing API_JWT_SECRET for core user journey",
+      "elapsed_seconds": 0.15147614479064941,
+      "evidence": "core user journey failed: missing API_JWT_SECRET for core user journey",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:8360 --api-jwt-secret '' --api-user-id 1 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password '' --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-CART-FLOW",
+      "name": "Cart select/update/delete/count flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "core user journey failed: missing API_JWT_SECRET for core user journey",
+      "elapsed_seconds": 0.15147614479064941,
+      "evidence": "core user journey failed: missing API_JWT_SECRET for core user journey",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:8360 --api-jwt-secret '' --api-user-id 1 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password '' --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-ADDRESS-FLOW",
+      "name": "Address create/default/use flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "core user journey failed: missing API_JWT_SECRET for core user journey",
+      "elapsed_seconds": 0.15147614479064941,
+      "evidence": "core user journey failed: missing API_JWT_SECRET for core user journey",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:8360 --api-jwt-secret '' --api-user-id 1 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password '' --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-CHECKOUT-FLOW",
+      "name": "Checkout freight/promotion/coupon flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "core user journey failed: missing API_JWT_SECRET for core user journey",
+      "elapsed_seconds": 0.15147614479064941,
+      "evidence": "core user journey failed: missing API_JWT_SECRET for core user journey",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:8360 --api-jwt-secret '' --api-user-id 1 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password '' --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-SUBMIT-FLOW",
+      "name": "Submit order and anti-tamper flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "core user journey failed: missing API_JWT_SECRET for core user journey",
+      "elapsed_seconds": 0.15147614479064941,
+      "evidence": "core user journey failed: missing API_JWT_SECRET for core user journey",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:8360 --api-jwt-secret '' --api-user-id 1 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password '' --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-ORDER-LIFECYCLE",
+      "name": "Order lifecycle cancel/status flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "core user journey failed: missing API_JWT_SECRET for core user journey",
+      "elapsed_seconds": 0.15147614479064941,
+      "evidence": "core user journey failed: missing API_JWT_SECRET for core user journey",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:8360 --api-jwt-secret '' --api-user-id 1 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password '' --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-PAY-FLOW",
+      "name": "Pay notify and idempotency flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "notify results: ok=1, fail=0",
+      "elapsed_seconds": 2.4721648693084717,
+      "evidence": "Traceback (most recent call last):\n  File \"/Volumes/SAMSUNG/fyb/myProjects/testing/scripts/pay_notify_concurrency.py\", line 383, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File \"/Volumes/SAMSUNG/fyb/myProjects/testing/scripts/pay_notify_concurrency.py\", line 370, in main\n    raise RuntimeError(f\"goods stock decrement expected 1, got before={goods_before}, after={goods_after}\")\nRuntimeError: goods stock decrement expected 1, got before=81, after=81",
+      "command": "python3 testing/scripts/pay_notify_concurrency.py --base-url http://127.0.0.1:8360 --workers 1 --user-id 1 --api-jwt-secret '' --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password '' --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-COUPON-LIFECYCLE",
+      "name": "Coupon receive/preview/lock/use/release flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "2) 创建并领取满减券 + 折扣券",
+      "elapsed_seconds": 0.2996091842651367,
+      "evidence": "Coupon 自动化测试失败: [/admin/coupon/create] errno=401 errmsg=请先登录",
+      "command": "node scripts/test-coupon.js"
+    },
+    {
+      "id": "L2-PROMOTION-LIFECYCLE",
+      "name": "Promotion and best-price flow",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P0",
+      "message": "开始执行 Promotion V1 mock 联调验证...",
+      "elapsed_seconds": 0.029999256134033203,
+      "evidence": "Promotion V1 mock 联调验证失败: service.previewCartPromotions is not a function",
+      "command": "node scripts/test-promotion-v1.js"
+    },
+    {
+      "id": "L2-OPERATIONS-FLOW",
+      "name": "Admin goods import task records and exports",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P2",
+      "message": "import_script=failed; operations_audit=failed",
+      "elapsed_seconds": 123.83810186386108,
+      "evidence": "import:任务轮询超时(taskId=67); audit:pymysql.err.OperationalError: (1045, \"Access denied for user 'root'@'172.18.0.1' (using password: NO)\")",
+      "command": "node scripts/test-goods-import.js && python3 testing/scripts/operations_audit_suite.py --base-url http://127.0.0.1:8360 --admin-username qilelab.com --admin-password qilelab.com --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password '' --db-name hiolabsDB --output /Volumes/SAMSUNG/fyb/myProjects/testing-artifacts/operations-audit-1772815093.json"
+    },
+    {
+      "id": "L2-DOMAIN-SUITE",
+      "name": "Domain long-tail suite",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P2",
+      "message": "missing API_JWT_SECRET",
+      "elapsed_seconds": 0.0,
+      "evidence": "",
+      "command": ""
+    }
+  ],
+  "summary": {
+    "total": 13,
+    "passed": 0,
+    "failed": 13,
+    "skipped": 0
+  }
+}

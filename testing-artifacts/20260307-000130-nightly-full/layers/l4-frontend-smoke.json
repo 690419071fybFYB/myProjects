@@ -1,0 +1,44 @@
+{
+  "suite": "L4-frontend-smoke",
+  "results": [
+    {
+      "id": "L4-MINI-REQUEST-SMOKE",
+      "name": "Mini request SDK smoke",
+      "layer": "L4",
+      "status": "failed",
+      "severity": "P1",
+      "message": "[telemetry] {\n  ts: 1772812892822,\n  event: 'request',\n  route: 'pages/index/index',\n  payload: {\n    networkType: 'unknown',\n    url: 'http://example.com/ok',\n    method: 'GET',\n    success: true,\n    code: 'OK',\n    duration: 0,\n    attempt: 0\n  }\n}\n[telemetry] {\n  ts: 1772812892823,\n  event: 'req",
+      "elapsed_seconds": 0.04916715621948242,
+      "evidence": "",
+      "command": "node testing/scripts/miniprogram_request_smoke.js"
+    },
+    {
+      "id": "L4-MINI-SYNTAX-SMOKE",
+      "name": "Mini key page JS syntax smoke",
+      "layer": "L4",
+      "status": "passed",
+      "severity": "P2",
+      "message": "syntax checks passed",
+      "elapsed_seconds": 0.17699313163757324,
+      "evidence": "",
+      "command": "node -c app.js && node -c utils/request/index.js && node -c utils/util.js && node -c pages/order-check/index.js && node -c pages/order-coupon/index.js && node -c pages/ucenter/index/index.js"
+    },
+    {
+      "id": "L4-ADMIN-LOGIN-SMOKE",
+      "name": "Admin login smoke",
+      "layer": "L4",
+      "status": "failed",
+      "severity": "P1",
+      "message": "request error: HTTPConnectionPool(host='127.0.0.1', port=1): Max retries exceeded with url: /admin/auth/login (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=1): Failed to establish a new connection: [Errno 61] Connection refused\"))",
+      "elapsed_seconds": 0.0017528533935546875,
+      "evidence": "",
+      "command": "POST /admin/auth/login"
+    }
+  ],
+  "summary": {
+    "total": 3,
+    "passed": 1,
+    "failed": 2,
+    "skipped": 0
+  }
+}

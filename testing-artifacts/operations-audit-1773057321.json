@@ -1,0 +1,22 @@
+{
+  "suite": "L2-operations-audit",
+  "results": [
+    {
+      "id": "L2-OPERATIONS-FLOW",
+      "name": "Goods import task list/detail/error-file and DB consistency",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P2",
+      "message": "(1054, \"Unknown column 'processed_rows' in 'field list'\")",
+      "elapsed_seconds": 0.15161490440368652,
+      "evidence": "",
+      "command": "GET /admin/goods/importTaskList + detail + errorFile + DB assert"
+    }
+  ],
+  "summary": {
+    "total": 1,
+    "passed": 0,
+    "failed": 1,
+    "skipped": 0
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "suite": "L2-business",
+  "scope": "full",
+  "results": [
+    {
+      "id": "L2-HOME-PAGE",
+      "name": "Home page load and popup/channel visibility",
+      "layer": "L2",
+      "status": "passed",
+      "severity": "P1",
+      "message": "appInfo ok, popupAd_present=1",
+      "elapsed_seconds": 0.04005289077758789,
+      "evidence": "",
+      "command": "GET /api/index/appInfo"
+    },
+    {
+      "id": "L2-LOGIN-GATE",
+      "name": "Login gate and profile completeness checks",
+      "layer": "L2",
+      "status": "passed",
+      "severity": "P0",
+      "message": "core user journey passed",
+      "elapsed_seconds": 0.26079297065734863,
+      "evidence": "",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:8360 --api-jwt-secret bae4fdabcc11cba5bb4aa9225bdbda8a936b41d729e86a65f44c02313d839278 --api-user-id 1048 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password CHANGE_ME_STRONG_PASSWORD --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-GOODS-FLOW",
+      "name": "Goods detail/spec/add-cart/buy-now flow",
+      "layer": "L2",
+      "status": "passed",
+      "severity": "P0",
+      "message": "core user journey passed",
+      "elapsed_seconds": 0.26079297065734863,
+      "evidence": "",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:8360 --api-jwt-secret bae4fdabcc11cba5bb4aa9225bdbda8a936b41d729e86a65f44c02313d839278 --api-user-id 1048 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password CHANGE_ME_STRONG_PASSWORD --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-CART-FLOW",
+      "name": "Cart select/update/delete/count flow",
+      "layer": "L2",
+      "status": "passed",
+      "severity": "P0",
+      "message": "core user journey passed",
+      "elapsed_seconds": 0.26079297065734863,
+      "evidence": "",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:8360 --api-jwt-secret bae4fdabcc11cba5bb4aa9225bdbda8a936b41d729e86a65f44c02313d839278 --api-user-id 1048 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password CHANGE_ME_STRONG_PASSWORD --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-ADDRESS-FLOW",
+      "name": "Address create/default/use flow",
+      "layer": "L2",
+      "status": "passed",
+      "severity": "P0",
+      "message": "core user journey passed",
+      "elapsed_seconds": 0.26079297065734863,
+      "evidence": "",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:8360 --api-jwt-secret bae4fdabcc11cba5bb4aa9225bdbda8a936b41d729e86a65f44c02313d839278 --api-user-id 1048 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password CHANGE_ME_STRONG_PASSWORD --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-CHECKOUT-FLOW",
+      "name": "Checkout freight/promotion/coupon flow",
+      "layer": "L2",
+      "status": "passed",
+      "severity": "P0",
+      "message": "core user journey passed",
+      "elapsed_seconds": 0.26079297065734863,
+      "evidence": "",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:8360 --api-jwt-secret bae4fdabcc11cba5bb4aa9225bdbda8a936b41d729e86a65f44c02313d839278 --api-user-id 1048 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password CHANGE_ME_STRONG_PASSWORD --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-SUBMIT-FLOW",
+      "name": "Submit order and anti-tamper flow",
+      "layer": "L2",
+      "status": "passed",
+      "severity": "P0",
+      "message": "core user journey passed",
+      "elapsed_seconds": 0.26079297065734863,
+      "evidence": "",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:8360 --api-jwt-secret bae4fdabcc11cba5bb4aa9225bdbda8a936b41d729e86a65f44c02313d839278 --api-user-id 1048 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password CHANGE_ME_STRONG_PASSWORD --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-ORDER-LIFECYCLE",
+      "name": "Order lifecycle cancel/status flow",
+      "layer": "L2",
+      "status": "passed",
+      "severity": "P0",
+      "message": "core user journey passed",
+      "elapsed_seconds": 0.26079297065734863,
+      "evidence": "",
+      "command": "python3 testing/scripts/core_user_journey.py --base-url http://127.0.0.1:8360 --api-jwt-secret bae4fdabcc11cba5bb4aa9225bdbda8a936b41d729e86a65f44c02313d839278 --api-user-id 1048 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password CHANGE_ME_STRONG_PASSWORD --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-PAY-FLOW",
+      "name": "Pay notify and idempotency flow",
+      "layer": "L2",
+      "status": "passed",
+      "severity": "P0",
+      "message": "Concurrent pay notify idempotency check passed.",
+      "elapsed_seconds": 0.44667816162109375,
+      "evidence": "",
+      "command": "python3 testing/scripts/pay_notify_concurrency.py --base-url http://127.0.0.1:8360 --workers 1 --user-id 1048 --api-jwt-secret bae4fdabcc11cba5bb4aa9225bdbda8a936b41d729e86a65f44c02313d839278 --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password CHANGE_ME_STRONG_PASSWORD --db-name hiolabsDB"
+    },
+    {
+      "id": "L2-COUPON-LIFECYCLE",
+      "name": "Coupon receive/preview/lock/use/release flow",
+      "layer": "L2",
+      "status": "passed",
+      "severity": "P0",
+      "message": "Coupon 模块自动化冒烟通过。",
+      "elapsed_seconds": 0.40966796875,
+      "evidence": "",
+      "command": "node scripts/test-coupon.js"
+    },
+    {
+      "id": "L2-PROMOTION-LIFECYCLE",
+      "name": "Promotion and best-price flow",
+      "layer": "L2",
+      "status": "passed",
+      "severity": "P0",
+      "message": "Promotion V1 mock 联调验证全部通过。",
+      "elapsed_seconds": 0.03082585334777832,
+      "evidence": "",
+      "command": "node scripts/test-promotion-v1.js"
+    },
+    {
+      "id": "L2-OPERATIONS-FLOW",
+      "name": "Admin goods import task records and exports",
+      "layer": "L2",
+      "status": "failed",
+      "severity": "P2",
+      "message": "import_script=failed; operations_audit=failed",
+      "elapsed_seconds": 122.26244688034058,
+      "evidence": "import:任务轮询超时(taskId=76); audit:(1054, \"Unknown column 'processed_rows' in 'field list'\")",
+      "command": "node scripts/test-goods-import.js && python3 testing/scripts/operations_audit_suite.py --base-url http://127.0.0.1:8360 --admin-username qilelab.com --admin-password qilelab.com --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password CHANGE_ME_STRONG_PASSWORD --db-name hiolabsDB --output /Volumes/SAMSUNG/fyb/myProjects/testing-artifacts/operations-audit-1773060024.json"
+    },
+    {
+      "id": "L2-INVITE-FLOW",
+      "name": "Invite summary/records and optional relation consistency",
+      "layer": "L2",
+      "status": "passed",
+      "severity": "P2",
+      "message": "schema_ready=1, invite_total=0",
+      "elapsed_seconds": 0.050837039947509766,
+      "evidence": "",
+      "command": "GET /api/invite/mySummary + GET /api/invite/myRecords"
+    },
+    {
+      "id": "L2-AD-MESSAGE-FLOW",
+      "name": "Ad unread/messages/readAll consistency",
+      "layer": "L2",
+      "status": "passed",
+      "severity": "P2",
+      "message": "before=0, after=0, user_ad_read_before=2, user_ad_read_after=2",
+      "elapsed_seconds": 0.02791905403137207,
+      "evidence": "",
+      "command": "GET /api/ad/unreadCount + GET /api/ad/messages + POST /api/ad/readAll"
+    },
+    {
+      "id": "L2-SEARCH-FOOTPRINT",
+      "name": "Search history and footprint create/list/delete consistency",
+      "layer": "L2",
+      "status": "passed",
+      "severity": "P2",
+      "message": "keyword=qa-search-1773060024, footprint_id=15676",
+      "elapsed_seconds": 0.062287092208862305,
+      "evidence": "",
+      "command": "search index/clear + footprint list/delete"
+    }
+  ],
+  "summary": {
+    "total": 15,
+    "passed": 14,
+    "failed": 1,
+    "skipped": 0
+  }
+}
