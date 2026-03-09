@@ -1,0 +1,403 @@
+diff --git a/app.json b/app.json
+index fc56d9c..12e5895 100644
+--- a/app.json
++++ b/app.json
+@@ -15,6 +15,7 @@
+         "pages/ucenter/address/index",
+         "pages/ucenter/address-detail/index",
+         "pages/ucenter/index/index",
++        "pages/ucenter/ad-message/index",
+         "pages/ucenter/settings/index",
+         "pages/ucenter/order-list/index",
+         "pages/ucenter/goods-list/index",
+diff --git a/config/api.js b/config/api.js
+index b996e5a..0126463 100755
+--- a/config/api.js
++++ b/config/api.js
+@@ -120,6 +120,9 @@ function applyApiRoot(nextRoot) {
+ 
+   // 首页
+   api.IndexUrl = apiRootUrl + 'index/appInfo';
++  api.AdMessageList = apiRootUrl + 'ad/messages';
++  api.AdUnreadCount = apiRootUrl + 'ad/unreadCount';
++  api.AdReadAll = apiRootUrl + 'ad/readAll';
+ 
+   // 分类
+   api.CatalogList = apiRootUrl + 'catalog/index';
+diff --git a/pages/index/index.js b/pages/index/index.js
+index 48e78ff..a930fd9 100644
+--- a/pages/index/index.js
++++ b/pages/index/index.js
+@@ -30,9 +30,113 @@ Page({
+         catalogPageCount: 1,
+         catalogPages: [0],
+         currentCatalogPage: 0,
++        popupAd: null,
++        showPopupAd: false,
++        popupDontShowToday: false,
+         uiV2: !!(api.features.newUiV2 && api.features.vantEnabled),
+         vantEnabled: !!api.features.vantEnabled
+     },
++    getTodayDateKey() {
++        const now = new Date();
++        const y = now.getFullYear();
++        const m = String(now.getMonth() + 1).padStart(2, '0');
++        const d = String(now.getDate()).padStart(2, '0');
++        return `${y}-${m}-${d}`;
++    },
++    getPopupDismissKey(adId) {
++        return `home_popup_dismiss:${this.getTodayDateKey()}:${Number(adId || 0)}`;
++    },
++    isPopupDismissedToday(adId) {
++        const key = this.getPopupDismissKey(adId);
++        return String(wx.getStorageSync(key) || '') === '1';
++    },
++    markPopupDismissedToday(adId) {
++        const key = this.getPopupDismissKey(adId);
++        wx.setStorageSync(key, '1');
++    },
++    applyPopupAdVisibility(popupAd) {
++        const ad = popupAd && Number(popupAd.id || 0) > 0 ? popupAd : null;
++        if (!ad) {
++            this.setData({
++                popupAd: null,
++                showPopupAd: false,
++                popupDontShowToday: false
++            });
++            return;
++        }
++        const dismissed = this.isPopupDismissedToday(ad.id);
++        this.setData({
++            popupAd: ad,
++            showPopupAd: !dismissed,
++            popupDontShowToday: false
++        });
++    },
++    onPopupDontShowChange(e) {
++        const values = (e && e.detail && e.detail.value) || [];
++        this.setData({
++            popupDontShowToday: Array.isArray(values) && values.includes('1')
++        });
++    },
++    savePopupDismissState() {
++        const adId = Number(this.data.popupAd && this.data.popupAd.id || 0);
++        if (adId > 0 && this.data.popupDontShowToday) {
++            this.markPopupDismissedToday(adId);
++        }
++    },
++    closePopupAd() {
++        this.savePopupDismissState();
++        this.setData({
++            showPopupAd: false
++        });
++    },
++    stopPopupTap() {
++        // block bubble
++    },
++    navigateByAd(ad) {
++        if (!ad) {
++            return;
++        }
++        const linkType = Number(ad.link_type || 0);
++        if (linkType === 0) {
++            const goodsId = Number(ad.goods_id || 0);
++            if (goodsId <= 0) {
++                util.showErrorToast('广告跳转配置错误');
++                return;
++            }
++            wx.navigateTo({
++                url: `/pages/goods/goods?id=${goodsId}`
++            });
++            return;
++        }
++        const link = String(ad.link || '').trim();
++        if (!/^\/pages\/[a-zA-Z0-9_/-]+(?:\?[^#\s]*)?$/.test(link)) {
++            util.showErrorToast('广告链接无效');
++            return;
++        }
++        const tabPages = [
++            '/pages/index/index',
++            '/pages/category/index',
++            '/pages/cart/cart',
++            '/pages/ucenter/index/index'
++        ];
++        const purePath = link.split('?')[0];
++        if (tabPages.includes(purePath)) {
++            wx.switchTab({ url: purePath });
++            return;
++        }
++        wx.navigateTo({ url: link });
++    },
++    handlePopupAdJump() {
++        const ad = this.data.popupAd;
++        if (!ad) {
++            return;
++        }
++        this.savePopupDismissState();
++        this.setData({
++            showPopupAd: false
++        });
++        this.navigateByAd(ad);
++    },
+     formatPromotionCountdown(endAt) {
+         const endTs = Number(endAt || 0);
+         if (!endTs) {
+@@ -300,13 +404,15 @@ Page({
+                 store.patch({
+                     cartCount: Number(res.data.cartCount || 0)
+                 });
++                that.applyPopupAdVisibility(res.data.popupAd || null);
+             }
+         }).catch(function () {
+             // Avoid permanent loading spinner when request fails.
+             that.setData({
+                 loading: 1,
+                 hasError: true,
+-                errorMessage: '首页数据加载失败，请检查接口或网络'
++                errorMessage: '首页数据加载失败，请检查接口或网络',
++                showPopupAd: false
+             });
+             util.showErrorToast(that.data.errorMessage);
+         });
+diff --git a/pages/index/index.wxml b/pages/index/index.wxml
+index 36ebc62..d2fa792 100644
+--- a/pages/index/index.wxml
++++ b/pages/index/index.wxml
+@@ -1,4 +1,19 @@
+ <view class="container {{uiV2 ? 'ui-v2' : ''}}" wx:if="{{loading == 1}}">
++    <view class="popup-ad-mask" wx:if="{{showPopupAd}}" bindtap="closePopupAd"></view>
++    <view class="popup-ad-wrap" wx:if="{{showPopupAd}}" bindtap="stopPopupTap">
++        <view class="popup-ad-card">
++            <image class="popup-ad-image" src="{{popupAd.image_url}}" mode="widthFix" bindtap="handlePopupAdJump"></image>
++            <view class="popup-ad-title" wx:if="{{popupAd.title}}">{{popupAd.title}}</view>
++            <view class="popup-ad-actions">
++                <checkbox-group bindchange="onPopupDontShowChange">
++                    <label class="popup-checkbox-label">
++                        <checkbox value="1" checked="{{popupDontShowToday}}" color="#ff3456" />今日不再出现
++                    </label>
++                </checkbox-group>
++                <button class="popup-close-btn" size="mini" plain bindtap="closePopupAd">关闭</button>
++            </view>
++        </view>
++    </view>
+     <view class="ui-error-card" wx:if="{{hasError && uiV2}}">
+         <text class="ui-error-text">{{errorMessage}}</text>
+         <van-button size="small" type="danger" plain bindtap="retryLoad">重试</van-button>
+diff --git a/pages/index/index.wxss b/pages/index/index.wxss
+index bdfe026..2aa1dcb 100644
+--- a/pages/index/index.wxss
++++ b/pages/index/index.wxss
+@@ -86,6 +86,68 @@
+     z-index: 99;
+ }
+ 
++.popup-ad-mask {
++    position: fixed;
++    left: 0;
++    right: 0;
++    top: 0;
++    bottom: 0;
++    background: rgba(0, 0, 0, 0.6);
++    z-index: 1001;
++}
++
++.popup-ad-wrap {
++    position: fixed;
++    left: 50%;
++    top: 50%;
++    transform: translate(-50%, -50%);
++    width: 640rpx;
++    z-index: 1002;
++}
++
++.popup-ad-card {
++    background: #fff;
++    border-radius: 18rpx;
++    overflow: hidden;
++    box-shadow: 0 12rpx 30rpx rgba(0, 0, 0, 0.2);
++}
++
++.popup-ad-image {
++    width: 100%;
++    display: block;
++}
++
++.popup-ad-title {
++    padding: 16rpx 20rpx 0;
++    font-size: 30rpx;
++    font-weight: 600;
++    color: #222;
++}
++
++.popup-ad-actions {
++    display: flex;
++    justify-content: space-between;
++    align-items: center;
++    padding: 14rpx 20rpx 18rpx;
++}
++
++.popup-checkbox-label {
++    display: flex;
++    align-items: center;
++    font-size: 24rpx;
++    color: #555;
++}
++
++.popup-close-btn {
++    height: 52rpx;
++    line-height: 52rpx;
++    font-size: 24rpx;
++    border-radius: 26rpx;
++    padding: 0 28rpx;
++    border-color: #d9d9d9;
++    color: #666;
++}
++
+ .mask {
+     width: 100%;
+     height: 1000rpx;
+diff --git a/pages/ucenter/index/index.js b/pages/ucenter/index/index.js
+index a3f7526..599cc88 100644
+--- a/pages/ucenter/index/index.js
++++ b/pages/ucenter/index/index.js
+@@ -16,6 +16,7 @@ Page({
+     is_new: 0,
+     root: api.ApiRoot,
+     showLoginProfileSheet: false,
++    adUnreadCount: 0,
+     uiV2: !!(api.features.newUiV2 && api.features.vantEnabled),
+     vantEnabled: !!api.features.vantEnabled
+   },
+@@ -89,6 +90,12 @@ Page({
+       url: '/pages/coupon-center/index'
+     });
+   },
++  toAdMessage: function () {
++    if (!this.ensureProfileReady()) return;
++    wx.navigateTo({
++      url: '/pages/ucenter/ad-message/index'
++    });
++  },
+   handleLoginTap() {
+     const token = wx.getStorageSync('token') || '';
+     if (!token) {
+@@ -167,6 +174,7 @@ Page({
+   onShow: function () {
+     this.ensureLoginAndLoadProfile();
+     this.getOrderInfo();
++    this.getAdUnreadCount();
+     wx.removeStorageSync('categoryId');
+   },
+   getSettingsDetail() {
+@@ -184,7 +192,8 @@ Page({
+         session.setProfileCompleted(false);
+         that.setData({
+           hasUserInfo: false,
+-          showLoginProfileSheet: false
++          showLoginProfileSheet: false,
++          adUnreadCount: 0
+         });
+       }
+     }).catch(function (err) {
+@@ -193,7 +202,8 @@ Page({
+         session.setProfileCompleted(false);
+         that.setData({
+           hasUserInfo: false,
+-          showLoginProfileSheet: false
++          showLoginProfileSheet: false,
++          adUnreadCount: 0
+         });
+         return;
+       }
+@@ -208,6 +218,7 @@ Page({
+       showLoginProfileSheet: !completed
+     });
+     this.getOrderInfo();
++    this.getAdUnreadCount();
+   },
+   onProfileSheetCancel() {
+     this.setData({
+@@ -242,4 +253,29 @@ Page({
+       });
+     });
+   },
++  getAdUnreadCount() {
++    const token = wx.getStorageSync('token') || '';
++    if (!token || !session.getProfileCompleted()) {
++      this.setData({
++        adUnreadCount: 0
++      });
++      return;
++    }
++    const that = this;
++    util.request(api.AdUnreadCount, {}, 'GET', { page: that, silent401: true }).then(function (res) {
++      if (res.errno === 0) {
++        that.setData({
++          adUnreadCount: Number(res.data && res.data.count || 0)
++        });
++        return;
++      }
++      that.setData({
++        adUnreadCount: 0
++      });
++    }).catch(function () {
++      that.setData({
++        adUnreadCount: 0
++      });
++    });
++  }
+ })
+diff --git a/pages/ucenter/index/index.wxml b/pages/ucenter/index/index.wxml
+index 48bc9e8..8ff88c3 100644
+--- a/pages/ucenter/index/index.wxml
++++ b/pages/ucenter/index/index.wxml
+@@ -104,6 +104,16 @@
+             </view>
+             <view class="arrow"></view>
+         </view>
++        <view class="list" bindtap="toAdMessage">
++            <view class="list-l">
++                <view class="icon">
++                    <image lazy-load="true" class="img" src="https://fybshopbk-1369967353.cos.ap-shanghai.myqcloud.com/images/icon/icon-service-r.png"></image>
++                </view>
++                <view class="text">广告消息</view>
++                <view class="message-badge" wx:if="{{adUnreadCount > 0}}">{{adUnreadCount > 99 ? '99+' : adUnreadCount}}</view>
++            </view>
++            <view class="arrow"></view>
++        </view>
+         <button class="contact-btn" session-from='{"nickName":"{{userInfo.nickname}}","avatarUrl":"{{userInfo.avatar}}"}' open-type="contact">
+             <view class="list-l">
+                 <view class="icon">
+@@ -139,6 +149,7 @@
+         <van-cell title="我的足迹" is-link bindtap="toFootprint" />
+         <van-cell title="我的优惠券" is-link bindtap="toCoupon" />
+         <van-cell title="领券中心" is-link bindtap="toCouponCenter" />
++        <van-cell title="广告消息" value="{{adUnreadCount > 0 ? (adUnreadCount > 99 ? '99+' : adUnreadCount) : ''}}" is-link bindtap="toAdMessage" />
+         <button class="contact-btn-v2" session-from='{"nickName":"{{userInfo.nickname}}","avatarUrl":"{{userInfo.avatar}}"}' open-type="contact">联系客服</button>
+         <van-cell title="关于我们" is-link bindtap="toAbout" />
+         <van-cell title="网络诊断" is-link bindtap="toDebugNetwork" />
+diff --git a/pages/ucenter/index/index.wxss b/pages/ucenter/index/index.wxss
+index 628a98c..c2815e8 100644
+--- a/pages/ucenter/index/index.wxss
++++ b/pages/ucenter/index/index.wxss
+@@ -288,6 +288,20 @@ page {
+     color: #333;
+ }
+ 
++.li-wrap .list .list-l .message-badge {
++    margin-left: 12rpx;
++    min-width: 34rpx;
++    padding: 0 8rpx;
++    height: 34rpx;
++    line-height: 34rpx;
++    border-radius: 17rpx;
++    background: #ff3456;
++    color: #fff;
++    font-size: 20rpx;
++    text-align: center;
++    box-sizing: border-box;
++}
++
+ .li-wrap .list .arrow {
+     width: 10rpx;
+     height: 10rpx;
