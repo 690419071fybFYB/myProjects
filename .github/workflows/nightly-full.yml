@@ -1,119 +1,17 @@
-name: CI
+name: Nightly Full Regression
 
 on:
-  pull_request:
-    branches: ["**"]
-  push:
-    branches: ["main", "master", "develop"]
+  workflow_dispatch:
+  schedule:
+    - cron: "0 18 * * *"
+
+concurrency:
+  group: nightly-full-regression
+  cancel-in-progress: false
 
 jobs:
-  server:
-    name: Server Checks
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: hioshop-server
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          token: ${{ secrets.SUBMODULES_PAT }}
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-          cache-dependency-path: hioshop-server/package-lock.json
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Compile
-        run: npm run compile
-
-      - name: Lint
-        run: |
-          HAS_ESLINT_CONFIG=false
-          if [ -f .eslintrc ] || [ -f .eslintrc.js ] || [ -f .eslintrc.cjs ] || [ -f .eslintrc.json ] || [ -f .eslintrc.yml ] || [ -f .eslintrc.yaml ]; then
-            HAS_ESLINT_CONFIG=true
-          elif [ -f package.json ] && node -e "const p=require('./package.json'); process.exit(p.eslintConfig ? 0 : 1)"; then
-            HAS_ESLINT_CONFIG=true
-          fi
-
-          if [ "$HAS_ESLINT_CONFIG" = "true" ]; then
-            npm run lint
-          else
-            echo "No ESLint config found, skip lint."
-          fi
-
-      - name: Coupon smoke test (optional)
-        if: ${{ vars.RUN_SERVER_SMOKE_TESTS == 'true' }}
-        run: npm run test:coupon
-
-      - name: Goods import smoke test (optional)
-        if: ${{ vars.RUN_SERVER_SMOKE_TESTS == 'true' }}
-        run: npm run test:goods-import
-
-  admin_web:
-    name: Admin Web Checks
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: hioshop-admin-web
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          token: ${{ secrets.SUBMODULES_PAT }}
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: npm
-          cache-dependency-path: hioshop-admin-web/package-lock.json
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Lint
-        run: npm run lint
-
-      - name: Unit tests
-        run: npm run test:unit -- --passWithNoTests
-
-      - name: Production build
-        run: npm run build:prod
-
-  miniprogram:
-    name: Miniprogram Syntax Checks
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          token: ${{ secrets.SUBMODULES_PAT }}
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: JavaScript syntax checks
-        working-directory: hioshop-miniprogram
-        run: |
-          node -c app.js
-          node -c utils/request/index.js
-          node -c utils/util.js
-          node -c services/pay.js
-          node -c services/user.js
-
-  pr_business_gate:
-    name: PR Business Gate
+  nightly_full:
+    name: Nightly Full Gate
     runs-on: ubuntu-latest
     services:
       mysql:
@@ -187,7 +85,7 @@ jobs:
           WEIXIN_APPID=wx-ci \
           WEIXIN_MCH_ID=mch-ci \
           WEIXIN_NOTIFY_URL=http://127.0.0.1:8360/api/pay/notify \
-          npm start > ../testing-artifacts/server-pr.log 2>&1 &
+          npm start > ../testing-artifacts/server-nightly.log 2>&1 &
           echo $! > ../testing-artifacts/server.pid
 
       - name: Wait server ready
@@ -202,15 +100,16 @@ jobs:
           echo "Server failed to start in time"
           exit 1
 
-      - name: Run PR gate
+      - name: Run nightly full
         env:
           COS_SECRET_ID: ${{ secrets.COS_SECRET_ID }}
           COS_SECRET_KEY: ${{ secrets.COS_SECRET_KEY }}
           COS_BUCKET: ${{ secrets.COS_BUCKET }}
           COS_REGION: ${{ secrets.COS_REGION }}
           COS_DOMAIN: ${{ secrets.COS_DOMAIN }}
+          PAY_NOTIFY_WORKERS: "8"
         run: |
-          python3 testing/run_pr_gate.py \
+          python3 testing/run_nightly_full.py \
             --workspace "$GITHUB_WORKSPACE" \
             --base-url "http://127.0.0.1:8360" \
             --api-jwt-secret "ci_api_secret_please_change" \
@@ -223,7 +122,8 @@ jobs:
             --db-port 3306 \
             --db-user "root" \
             --db-password "root" \
-            --db-name "hiolabsDB"
+            --db-name "hiolabsDB" \
+            --concurrency-workers 8
 
       - name: Stop server
         if: always()
@@ -232,10 +132,10 @@ jobs:
             kill "$(cat testing-artifacts/server.pid)" || true
           fi
 
-      - name: Upload gate artifacts
+      - name: Upload nightly artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: pr-business-gate-artifacts
+          name: nightly-full-artifacts
           path: testing-artifacts
           if-no-files-found: ignore
