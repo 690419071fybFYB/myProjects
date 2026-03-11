@@ -1,4 +1,5 @@
 .DS_Store
 testing-artifacts/
+.ci-artifacts/
 **/__pycache__/
 *.pyc
