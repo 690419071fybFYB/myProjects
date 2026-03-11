@@ -34,19 +34,7 @@ jobs:
         run: npm run compile
 
       - name: Lint
-        run: |
-          HAS_ESLINT_CONFIG=false
-          if [ -f .eslintrc ] || [ -f .eslintrc.js ] || [ -f .eslintrc.cjs ] || [ -f .eslintrc.json ] || [ -f .eslintrc.yml ] || [ -f .eslintrc.yaml ]; then
-            HAS_ESLINT_CONFIG=true
-          elif [ -f package.json ] && node -e "const p=require('./package.json'); process.exit(p.eslintConfig ? 0 : 1)"; then
-            HAS_ESLINT_CONFIG=true
-          fi
-
-          if [ "$HAS_ESLINT_CONFIG" = "true" ]; then
-            npm run lint
-          else
-            echo "No ESLint config found, skip lint."
-          fi
+        run: npm run lint
 
       - name: Coupon smoke test (optional)
         if: ${{ vars.RUN_SERVER_SMOKE_TESTS == 'true' }}
@@ -72,7 +60,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
           cache: npm
           cache-dependency-path: hioshop-admin-web/package-lock.json
 
@@ -89,7 +77,7 @@ jobs:
         run: npm run build:prod
 
   miniprogram:
-    name: Miniprogram Syntax Checks
+    name: Miniprogram Lint & Syntax Checks
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -101,16 +89,21 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
+          cache: npm
+          cache-dependency-path: hioshop-miniprogram/package-lock.json
+
+      - name: Install dependencies
+        working-directory: hioshop-miniprogram
+        run: npm install
+
+      - name: Lint
+        working-directory: hioshop-miniprogram
+        run: npm run lint
 
       - name: JavaScript syntax checks
         working-directory: hioshop-miniprogram
-        run: |
-          node -c app.js
-          node -c utils/request/index.js
-          node -c utils/util.js
-          node -c services/pay.js
-          node -c services/user.js
+        run: npm run test:syntax
 
   pr_business_gate:
     name: PR Business Gate
